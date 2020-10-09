@@ -357,59 +357,49 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="index.html">Starting page</a>
+</li>
+<li>
+  <a href="lecture.html">Lecture</a>
+</li>
+<li>
+  <a href="packages.html">Installing packages</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    R
+    Contents
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="Head1_CourseContent.html">About Course Content</a>
+      <a href="01_vector.html">1 - Vector data</a>
+    </li>
+    <li>
+      <a href="02_raster.html">2 - Raster data</a>
+    </li>
+    <li>
+      <a href="03_multidim.html">3 - Multidimensional data</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Module 1: Introduction to R</li>
+    <li class="dropdown-header">Analysing spatial data</li>
     <li>
-      <a href="00_CourseIntroductionFrame.html">1.0 Course Introduction</a>
+      <a href="04_manip.html">4 - Spatial manipulations</a>
     </li>
     <li>
-      <a href="01_Rintro.html">1.1 First Steps</a>
+      <a href="05_extractoverlay.html">5 - Overlays and extractions</a>
     </li>
     <li>
-      <a href="02_DataWrangling.html">1.2 Data Wrangling</a>
-    </li>
-    <li>
-      <a href="03_Plotting.html">1.3 Plotting</a>
+      <a href="06_extools.html">6 - External tools</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Module 2: Spatial Analyses</li>
+    <li class="dropdown-header">Spatial visualization</li>
     <li>
-      <a href="04_Spatial.html">2.1 Spatial Data</a>
+      <a href="07_tmap.html">7 - Thematic maps</a>
     </li>
     <li>
-      <a href="05_Raster.html">2.2 Spatial Raster Data</a>
+      <a href="08_mapview.html">8 - Interactive maps</a>
     </li>
-    <li>
-      <a href="06_RasterTwo.html">2.3 More Raster Data</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Module 3: Building R packages</li>
-    <li>
-      <a href="Quickstart_RPackages.html">3.1 Quickstart guide</a>
-    </li>
-    <li class="dropdown-header">Module 4: Reproducible and Interactive Research</li>
-    <li>
-      <a href="07_Reproducible.html">4.1 Research Reports with R markdown</a>
-    </li>
-    <li>
-      <a href="11_Git.html">4.2 Version control with Github</a>
-    </li>
-    <li>
-      <a href="07_03_RMarkdown_Tools.html">4.3 RMarkdown Tools: Interactive Presentations, Apps, Websites</a>
-    </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -418,7 +408,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/cmerow/RDataScience/tree/gh-pages">
+  <a href="https://iiasa.ac.at">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -445,17 +435,10 @@ div.tocify {
 </div>
 
 
-<p><a href="https://www.iiasa.ac.at/staff/staff.php?type=auto&visibility=visible&search=true&login=jung"> Martin Jung</a><br> Ecosystems Services and Management <br> International Institute for Applied Systems Analysis (IIASA), Laxenburg, Austria</p>
+<p><br> <a href="https://www.iiasa.ac.at/staff/staff.php?type=auto&visibility=visible&search=true&login=jung"> Martin Jung</a><br> Ecosystems Services and Management <br> International Institute for Applied Systems Analysis (IIASA), Laxenburg, Austria <br></p>
 <!-- Internal CDAT workshop at IIASA  -->
-<p>This online self-learning course aims to provide basic knowledge about spatial datasets in R and how to analyse them. In many instances R might not be the fastest tool one can use for these kinds of analyses, but it certainly is the fastest in terms of time spent in code development. Apart from the <a href="https://iiasa.ac.at">lecture slides</a> the course is structured into spatial data types and basic geospatial analyses. This course assumes that users already have basic knowledge of R.</p>
-<p>I generally tried to avoid replicating things that are already openly available online through other resources. Thus, if you are interested in more or other training materials regarding spatial data and analyses, check out the resources link at the top with more examples and free self-learning tutorials.</p>
-<p>Content</p>
-<p>Loading and interacting with spatial data sp and raster</p>
-<p>Visualizing spatial data - Thematic maps with tmap - <a href="http://user2015.math.aau.dk/presentations/20.pdf" class="uri">http://user2015.math.aau.dk/presentations/20.pdf</a> (check newest)</p>
-<ul>
-<li>mapview</li>
-<li>Interactively explore</li>
-</ul>
+<p>Apart from the <a href="https://iiasa.ac.at">lecture slides</a> this online self-learning course aims to provide you with basic knowledge about spatial datasets in R, how to load and analyse them. In many instances R might not be the fastest tool one can use for these kinds of analyses, but it certainly is the fastest in terms of time spent in code development. Here we will use R as a wrapper to load in external tools. This course assumes that users already have basic knowledge of R.</p>
+<p>I generally tried to avoid replicating things that are already openly available online through other resources. Thus, if you are interested in more or other training materials regarding spatial data and analyses in R, check out the resources link at the top with more examples and free self-learning tutorials.</p>
 
 
 <!-- give the footer some space -->
@@ -468,6 +451,7 @@ div.tocify {
   <div id="footer2">
   <a rel="license" property="http://creativecommons.org/ns#license"
   href="http://creativecommons.org/licenses/by/4.0/" ><img src="img/cc-by.svg" alt="cc-by"/></a> 
+  <a href = 'https://iiasa.ac.at/'> <img src='img/IIASA_PNG%20logo-short_blue.png' alt = 'IIASA' width = 30px height = 40px> </a>
   </div>
 </footer>
 
