@@ -9,6 +9,7 @@ left:
     href: packages.html    
   - text: "Contents"
     menu:
+      - text: "Loading spatial data"
       - text: "1 - Vector data"
         href: 01_vector.html
       - text: "2 - Raster data"

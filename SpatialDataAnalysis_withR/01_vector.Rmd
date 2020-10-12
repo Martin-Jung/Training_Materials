@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R"
+title: "Vector data in R"
 output: 
   html_document: 
     theme: yeti
@@ -13,306 +13,265 @@ knitr::purl(input,output,documentation=2,quiet=T,envir=new.env())
 knitr::opts_chunk$set(cache=TRUE)
 ```
 
-# Working with vector data
-
 [<i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here](`r output`).  Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.  
 
-## Variables
+
+# Working with vector data
+
+Before running any code here, make sure that you have installed all [necessary packages](packages.html) beforehand. 
+
+As described in the [lecture](lecture.html), spatial vector data come in a variety of formats and there are also multiple ways of loading them into R.
+
+## Vector data in text format
+
+Sometimes spatial data is distributed in the form on text information only. A good example are for instance point localities. 
+For start, lets get some spatial data in text format
+
 ```{r}
-x=1
-x
+# Lets get some data from
+#Fritz, Steffen; See, Linda; Perger, Christoph; McCallum, Ian; Schill, Christian; Schepaschenko, Dmitry; Duerauer, Martina; Karner, Mathias; Dresel, Christopher; Laso-Bayas, Juan-Carlos; Lesiv, Myroslava; Moorthy, Inian; Salk, Carl F; Danylo, Olha; Sturn, Tobias; Albrecht, Franziska; You, Liangzhi; Kraxner, Florian; Obersteiner, Michael (2016): A global dataset of crowdsourced land cover and land use reference data (2011-2012). PANGAEA https://doi.pangaea.de/10.1594/PANGAEA.869660
+
+dat <- read.table('https://doi.pangaea.de/10.1594/PANGAEA.869660?format=textfile',
+                  skip = 17,sep = '\t',header = T)
+
+class(dat)
+```
+As you can see, this data is currently in tabular format. Let's make it explicitly spatial. 
+To do so we are going to work with the **sp** package for start. 
+
+The **sp** package is the old default way to create and manipulate spatial objects in R. Many R packages, particular those that haven't been updated in a while, will likely still depend on this format. However it has largely been superseded by the *sf* package that combines spatial information with the tidy data concept. More about this latter though.
+
+Convert and format our tabular data to a spatial object
+
+```{r}
+library(sp)
+
+# Set the coordinates for this object to the coordinate columns
+# Here we first define the x-axis (longitude), followed by the y-axis (latitude)
+coordinates(dat) <- ~ Longitude + Latitude
+
+# By default this object won't have any projection assigned
+# Since we know that the tabular data is in WGS-84 projection (Longitude-Latitude), we can set it
+proj4string(dat) <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+
 ```
 
-We can also assign a vector to a variable:
-
-```{r}
-x=c(5,8,14,91,3,36,14,30)
-x
-```
-
-And do simple arithmetic:
-```{r}
-x+2
-```
 
 <div class="well">
-Create a new variable called `y` and set it to `15`
+Do you think you can visualize this new object and check that it is indeed spatial?
+
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">Show Solution</button>
 <div id="demo1" class="collapse">
-
 ```{r, purl=F}
-y=15
+plot(dat)
+
+class(dat)
 ```
+Well done. 
 </div>
 </div>
 
+You note that the object has now been converted to a SpatialPointsDataFrame, so a Spatial Points object, which is a requirement for many packages that interact with spatial data
 
-Note that `R` is case sensitive, if you ask for `X` instead of `x`, you will get an error
-```{r,eval=FALSE}
-X
-Error: object 'X' not found
-```
+### Well known text information
 
+Text format can be used not only to define point data (such as longitude-latitude), but also other geometric representations such as polygon data. According OGC standards these data can be for instance formatted as [Well-known text (WKT)](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry), which is an important concept in spatial analyis that we will mention latter too.
 
-### Variable naming conventions
-
-Naming your variables is your business, but there are [5 conventions](http://www.r-bloggers.com/consistent-naming-conventions-in-r/) to be aware of:
-
-* **alllowercase**: _e.g._ `adjustcolor`
-* **period.separated**: _e.g._ `plot.new`
-* **underscore_separated**: _e.g._ `numeric_version`
-* **lowerCamelCase**: _e.g._ `addTaskCallback`
-* **UpperCamelCase**: _e.g._ `SignatureMethod`
-
-
-# Subsetting
-```{r}
-x
-```
-
-Subset the vector using `x[ ]` notation
-```{r}
-x[5]
-```
-You can use a `:` to quickly generate a sequence:
-```{r}
-1:5
-```
-and use that to subset as well:
-```{r}
-x[1:5]
-```
-
-# Using Functions
-
-To calculate the mean, you could do it _manually_ like this
+For instance here is polygon that covers the Laxenburg schlosspark
 
 ```{r}
-(5+8+14+91+3+36+14+30)/8
+lax <- 'POLYGON ((16.3594574385736 48.0702355060673,16.3609882350041 48.0694683197585,16.3648152260803 48.0688107223911,16.3684782032532 48.0682627181663,16.3736173055555 48.0696509842027,16.3794124634709 48.0710757446162,16.3814353016112 48.0709296171584,16.380724574697 48.0694683197585,16.3785923939546 48.0664725303671,16.3749840880827 48.0617958276381,16.3690249162641 48.0575206573412,16.3621910036281 48.0518198780156,16.3587467116595 48.0578129879854,16.3537716232604 48.0564609448419,16.3553024196909 48.0589822939637,16.3534435954539 48.0606631247802,16.3532249102496 48.0634400293739,16.3544823501746 48.0651207146451,16.3591840820682 48.0663263898385,16.3598948089823 48.0668013450392,16.3583640125519 48.067605105394,16.3590200681649 48.0688472557986,16.3594574385736 48.0702355060673))'
+
 ```
 
-Or use a function:
+To convert it to an sp object, we will rely on the GEOS library available through R with the *rgeos* package
+
 ```{r}
-mean(x)
+library(rgeos)
+laxpol <- readWKT(lax)
+
 ```
 
-Type `?functionname` to get the documentation (`?mean`) or `??"search parameters` (??"standard deviation") to search the documentation.  In RStudio, you can also search in the help panel.  `mean` has other arguments too: 
+### Creating your own spatial data
 
-`mean(x, trim = 0, na.rm = FALSE, ...)`
+We won't go much into detail in this and in my experience you will rarely do this directly in R. Here is for instance how we could define a Spatial Points object directly in R. If you are more interested in this, check out some of the [resources](resources.html).
 
-In RStudio, if you press `TAB` after a function name (such as `mean( `), it will show function arguments.
+```{r}
 
-![Autocomplete screenshot][pic1]
+# First lets create some random point data
+coords <- data.frame( x = rnorm(100,3),
+                      y = rnorm(100,3)
+                      )
+
+# To convert to a SpatialPoints object
+x = SpatialPoints(coords)
+
+# Finally lets assign some data to it, so that it becomes a Spatial*DataFrame object
+d <- data.frame(ID = 1:100)
+spdf <- SpatialPointsDataFrame(coords,d)
+
+```
 
 
 <div class="well">
-Calculate the standard deviation of `c(3,6,12,89)`.    
+This data still doesn't have a projection. Remember how to assign it?
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">Show Solution</button>
 <div id="demo2" class="collapse">
-
 ```{r, purl=F}
-y=c(3,6,12,89)
-sqrt((sum((y-mean(y))^2))/(length(y)-1))
-
-#or
-sd(y)
-
-#or
-sd(c(3,6,12,89))
+proj4string(spdf) <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
 ```
+
 </div>
 </div>
 
+# Loading and writing different formats of vector data
 
-Writing functions in R is pretty easy.  Let's create one to calculate the mean of a vector by getting the sum and length.  First think about how to break it down into parts:
-```{r}
-x1= sum(x)
-x2=length(x)
-x1/x2
+In most cases however the spatial data won't come in text format, but in some other format that requires separate solutions for loading them in. Here we going to use the **rgdal** package which supports a number of spatial data and is the main background work hose also for [raster](02_raster.html) data.
+
+```{r, echo = F}
+library(rgdal)
+
+knitr::kable(ogrDrivers())
 ```
 
-Then put it all back together and create a new function called `mymean`:
-```{r}
-mymean=function(f){
-  sum(f)/length(f)
-}
+## Read in some external data
 
-mymean(f=x)
-```
-
-Confirm it works:
-```{r}
-mean(x)
-```
-
-<div class="well"> Any potential problems with the `mymean` function? </div>
-
-# Missing data:  dealing with `NA` values
-```{r}
-x3=c(5,8,NA,91,3,NA,14,30,100)
-```
-
-<div class="well">" What do you think `mymean(x3)` will return? </div>
-
-Calculate the mean using the new function
-```{r}
-mymean(x3)
-```
-Use the built-in function (with and without na.rm=T)
-```{r}
-mean(x3)
-mean(x3,na.rm=T)
-```
-Writing simple functions is easy, writing robust, reliable functions can be hard...
-
-
-## Logical values
-
-R also has standard conditional tests to generate `TRUE` or `FALSE` values (which also behave as `0`s and `1`s.  These are often useful for filtering data (e.g. identify all values greater than 5).  The logical operators are `<`, `<=`, `>`, `>=`, `==` for exact equality and `!=` for inequality.
+For testing we are going to read in some of the example data that comes with the rgdal package
 
 ```{r}
-  x
+# Data from the rgdal package
+dsn <- system.file("vectors", package = "rgdal")[1]
 
-  x3 > 75
- 
-  x3 == 40
- 
-  x3 >   15
+# Which layers are in the data source
+ogrListLayers(dsn)
+
 ```
 
 
-And you can perform operations on those results:
-```{r}
-sum(x3>15,na.rm=T)
-```
-
-or save the results as variables:
-```{r}
-result =  x3 >  3
-result
-```
+The rgdal package always requires a folder name (data source) and a filename without extension.
 
 <div class="well">
-Define a function that counts how many values in a vector are less than or equal (`<=`) to 12.  
+Can you use the **ogrInfo()** command from the rgdal package to query the information in the 'cities' layer?
+The command requires a folder (dsn) and the name of the layer
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo3">Show Solution</button>
 <div id="demo3" class="collapse">
-
 ```{r, purl=F}
-mycount=function(x){
-  sum(x<=12)
-}
-```
-Try it:
-```{r}
-x3
-mycount(x3)
-```
-oops!
-
-```{r, purl=F}
-mycount=function(x){
-  sum(x<=12,na.rm=T)
-}
-```
-Try it:
-```{r}
-x3
-mycount(x3)
+ogrInfo(dsn=dsn, layer="cities")
 ```
 
-Nice!
 </div>
 </div>
 
-
-# Generating Data
-
-There are many ways to generate data in R such as sequences:
-```{r}
-seq(from=0, to=1, by=0.25)
-```
-and random numbers that follow a statistical distribution (such as the normal):
+To load the layer using rgdal
 
 ```{r}
-a=rnorm(100,mean=0,sd=10)
+# To load the cities.shp file. Note that you point to the name of the layer and not the name of the file
+cities <- readOGR(dsn=dsn, layer="cities")
+
 ```
 
+## Writing vector data
 
-Let's visualize those values in a histogram:
-```{r,fig.height=3}
-hist(a)
-```
+The rgdal package also comes with functionalities to write vector data
 
-We'll cover much more sophisticated graphics later...
-
-# Data Types
-
-## Matrices
-You can also use matrices (2-dimensional arrays of numbers):
-```{r}
-y=matrix(1:9,ncol=3)
-y
-```
-
-
-Matrices behave much like vectors:
-```{r}
-y+2
-```
-
-
-and have 2-dimensional indexing:
-```{r}
-y[2,3]
+```{r, eval=FALSE}
+# Save the loaded cities file to your folder
+output_folder = '.' # a dot is for the current folder
+output_name = 'new_cities' # the output name
+writeOGR(cities,dsn = output_folder, layer = output_name ,driver = "ESRI Shapefile")
 ```
 
 <div class="well">
-Create a 3x3 matrix full of random numbers.  Hint: `rnorm(5)` will generate 5 random numbers
+Can you load and write the previously created laxenburg park data used above (as WKT) and save it as geopackage.
+To check the name for geopackage drivers, see the output from ogrDrivers() above.
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo4">Show Solution</button>
 <div id="demo4" class="collapse">
 
-```{r, purl=F}
-matrix(rnorm(9),nrow=3)
+```{r, purl=FALSE, eval = FALSE}
+library(rgeos)
+library(rgdal)
+
+lax <- 'POLYGON ((16.3594574385736 48.0702355060673,16.3609882350041 48.0694683197585,16.3648152260803 48.0688107223911,16.3684782032532 48.0682627181663,16.3736173055555 48.0696509842027,16.3794124634709 48.0710757446162,16.3814353016112 48.0709296171584,16.380724574697 48.0694683197585,16.3785923939546 48.0664725303671,16.3749840880827 48.0617958276381,16.3690249162641 48.0575206573412,16.3621910036281 48.0518198780156,16.3587467116595 48.0578129879854,16.3537716232604 48.0564609448419,16.3553024196909 48.0589822939637,16.3534435954539 48.0606631247802,16.3532249102496 48.0634400293739,16.3544823501746 48.0651207146451,16.3591840820682 48.0663263898385,16.3598948089823 48.0668013450392,16.3583640125519 48.067605105394,16.3590200681649 48.0688472557986,16.3594574385736 48.0702355060673))'
+
+laxpol <- readWKT(lax)
+
+# Convert to data.frame
+laxpol <- SpatialPolygonsDataFrame(laxpol, data = data.frame(name = 'Laxenburg park') )
+proj4string(laxpol) <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+
+# Write the output
+writeOGR(obj = laxpol,dsn = '.', layer = 'Laxenburg',driver = 'GPKG')
+
 ```
+Well done!
 </div>
 </div>
 
-## Data Frames
-Data frames are similar to matrices, but more flexible.  Matrices must be all the same type (e.g. all numbers), while a data frame can include multiple data types (e.g. text, factors, numbers). Dataframes are commonly used when doing statistical modeling in R.  
+# Vector data with the sf package
+
+The R programming language has in recent years experience some form of revolution that data are treated and formatted as ['tidy' data](https://vita.had.co.nz/papers/tidy-data.html). 
+
+Loading spatial data into R using **sf** is comparably easier
 
 ```{r}
-data = data.frame( x = c(11,12,14),
-                   y = c("a","b","b"),
-                   z = c(T,F,T))
-data
+library(sf)
+
+# Load the default country file coming with sf
+nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"))
+
+class(nc)
+
+# Show the top 6 rows
+head(nc, 6)
+
 ```
 
+Notice how this new object is both a 'sf' object as well as a 'data.frame'. All the data assigned to this vector table can be used like you would use any other spatial information in a R data.frame, e.g. subsetting, filtering, plotting, etc...
+Furthermore the geometry is here not saved as part of the R-object but explicitly adressable in the column 'geom' using WKT. 
 
-You can subset in several ways
+Similarly, individual (or multiple) can be plotted by adressing them as you would adress an item in a list object
+So
+
 ```{r}
-mean(data$x)
-
-mean(data[["x"]])
-
-mean(data[,1])
+plot(nc['SID74'])
 ```
 
-# Loading Packages
+Writing outputs in sf is equally straight forward
 
-For installed packages:  `library(packagename)`.
+```{r, eval = FALSE}
+# If you want to write this into a folder called myfolder
+st_write(nc, paste0('myfolder', "/", "nc.shp") )
 
-New packages: `install.packages()` or use the package manager. 
-
-```{r message=F,warning=FALSE}
-library(raster)
+# You can also output the geometry data in WKT format
+st_as_text(nc$geom)
 ```
 
-> R may ask you to choose a CRAN mirror. CRAN is the distributed network of servers that provides access to R's software.  It doesn't really matter which you chose, but closer ones are likely to be faster.  From RStudio, you can select the mirror under Tools→Options or just wait until it asks you.
+Sometimes a function or r-package creates outputs that are not in sf format. These need to be converted to sf before being able to use them in tidy format.
+The function for that in R is `st_as_sf`.
 
+<div class="well">
+Can you take the Laxenburg park object and calculate its area ?
+The function to do so is 'st_area()' and requires a sf object.
 
-If you don't have the packages above, install them in the package manager or by running `install.packages("raster")`.
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo5">Show Solution</button>
+<div id="demo5" class="collapse">
+
+```{r, purl=FALSE, eval = FALSE}
+# Convert the file
+sf_laxpol <- st_as_sf(laxpol)
+
+# The area in m2
+st_area(sf_laxpol)
+```
+Area calculations using the sf package use the 'units' package to assign a unit in R to vector of numeric values.
+You should get in result of ~2.2 Million ha
+</div>
+</div>
+
+For the rest of the course we will primarily use the **sf** package for any spatial manipulation.
+
 

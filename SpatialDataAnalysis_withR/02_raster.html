@@ -11,7 +11,7 @@
 
 
 
-<title>Resources</title>
+<title>Raster data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -431,20 +431,47 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Resources</h1>
+<h1 class="title toc-ignore">Raster data</h1>
 
 </div>
 
 
-<p>If you haven’t got enough, then here more excellent (free) resources to deepen your knowledge</p>
-<p><br></p>
-<ul>
-<li><p>Lovelace, Robin and Nowosad, Jakub and Muenchow, Jannes (2019). Geocomputation with R. <a href="https://geocompr.robinlovelace.net/">https://geocompr.robinlovelace.net/</a></p></li>
-<li><p>R as GIS for Economists <a href="https://tmieno2.github.io/R-as-GIS-for-Economists/" class="uri">https://tmieno2.github.io/R-as-GIS-for-Economists/</a></p></li>
-<li><p>Rspatial website with examples <a href="https://www.rspatial.org/index.html" class="uri">https://www.rspatial.org/index.html</a></p></li>
-<li><p>Spatial cheatsheet <a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/master/sf.pdf</a></p></li>
-<li><p>University of Edinbourgh Coding Club tutorials <a href="https://ourcodingclub.github.io/">https://ourcodingclub.github.io/</a></p></li>
-</ul>
+<p><a href="02_raster.R"><i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here</a>. Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.</p>
+<div id="working-with-raster-data" class="section level1">
+<h1><span class="header-section-number">1</span> Working with raster data</h1>
+<p>Raster data in R can be loaded in a relatively straight forward way using the <strong>raster</strong> package. There are other ways of loading raster data, including implementations in <strong>sp</strong>, where raster data can be formatted as ‘SpatialPixelsDataFrame()’.</p>
+<p>The <strong>raster</strong> package is still the most widely used package though, although it is increasingly being replaced by an approach that is based on a tidy concept (separating raw data from metadata and spatial information). More on this later</p>
+<p>First, lets load the raster package and some first data</p>
+<pre class="r"><code>library(raster)
+
+# The data to load is from Jung et al. (2020), https://www.nature.com/articles/s41597-020-00599-8
+# I have prepared a subset for the Alpes to load in here. 
+# These contain the fraction (multiplied with 1000) of a grid cell containing forest or arti at 1km. 
+
+# We now load the forest layer from this object
+ras &lt;- raster(&#39;ht_004_clipped.tif&#39;,layer = 1)
+
+class(ras)</code></pre>
+<pre><code>## [1] &quot;RasterLayer&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;raster&quot;</code></pre>
+<pre class="r"><code># Plot the raster data
+plot(ras, col = topo.colors(100))</code></pre>
+<p><img src="02_raster_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
+<p>Here we loaded in the first band of the data as Raster object, but there are others (more about this in <a href="multidim.html">multidimensional</a>).</p>
+<div class="well">
+<p>Can you load in and plot the second band (artifical landscapes)?</p>
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">
+Show Solution
+</button>
+<div id="demo1" class="collapse">
+<pre class="r"><code>ras_crop &lt;- raster(&#39;ht_004_clipped.tif&#39;,layer = 2)
+
+plot(ras, col = heat.colors(100))</code></pre>
+<p><img src="02_raster_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
+</div>
+</div>
+</div>
 
 
 <!-- give the footer some space -->

@@ -372,6 +372,7 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Loading spatial data</li>
     <li>
       <a href="01_vector.html">1 - Vector data</a>
     </li>
@@ -441,7 +442,9 @@ install.packages(&#39;rgdal&#39;) # Interface to the gdal library in R
 install.packages(&#39;raster&#39;) # To load raster data in R
 install.packages(&#39;sf&#39;) # The sucessor to the sp package - tidy vector data
 install.packages(&#39;stars&#39;) # The sucessor to the raster package - tidy raster data
+install.packages(&#39;ncdf4&#39;) # For loading the propertiary ncdf format
 
+install.packages(&#39;rgeos&#39;) # Wrapper for the GEOS library
 install.packages(&#39;velox&#39;) # Fast extraction from raster data 
 install.packages(&#39;exactextractr&#39;) # Fast extraction from raster data 
 install.packages(&#39;gdalUtils&#39;) # A wrapper for accessing the gdal tools within R 
@@ -450,7 +453,7 @@ remotes::install_github(&quot;paleolimbot/qgisprocess&quot;) # A wrapper for acc
 
 install.packages(&#39;mapview&#39;) # For intactive spatial visualizations
 install.packages(&#39;tmap&#39;) # For thematic map visualizations</code></pre>
-<p>If one or two of the package installations fail, then copy the error code and search for it using your search engine of choice.</p>
+<p>If one or two of the package installations fail, then copy the error description and search for it using your search engine of choice.</p>
 
 
 <!-- give the footer some space -->

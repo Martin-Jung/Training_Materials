@@ -15,7 +15,9 @@ install.packages('rgdal') # Interface to the gdal library in R
 install.packages('raster') # To load raster data in R
 install.packages('sf') # The sucessor to the sp package - tidy vector data
 install.packages('stars') # The sucessor to the raster package - tidy raster data
+install.packages('ncdf4') # For loading the propertiary ncdf format
 
+install.packages('rgeos') # Wrapper for the GEOS library
 install.packages('velox') # Fast extraction from raster data 
 install.packages('exactextractr') # Fast extraction from raster data 
 install.packages('gdalUtils') # A wrapper for accessing the gdal tools within R 
@@ -26,4 +28,4 @@ install.packages('mapview') # For intactive spatial visualizations
 install.packages('tmap') # For thematic map visualizations
 ```
 
-If one or two of the package installations fail, then copy the error code and search for it using your search engine of choice.
+If one or two of the package installations fail, then copy the error description and search for it using your search engine of choice.

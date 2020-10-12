@@ -13,8 +13,6 @@ output:
 
 <!-- Internal CDAT workshop at IIASA  -->
 
-Apart from the [lecture slides](https://iiasa.ac.at) this online self-learning course aims to provide you with basic knowledge about spatial datasets in R, how to load and analyse them. In many instances R might not be the fastest tool one can use for these kinds of analyses, but it certainly is the fastest in terms of time spent in code development. Here we will use R as a wrapper to load in external tools. This course assumes that users already have basic knowledge of R.
+Apart from the [lecture slides](lecture.html) this online self-learning course aims to provide you with basic knowledge about spatial datasets in R, how to load and analyse them. In many instances R might not be the fastest tool one can use for these kinds of analyses, but it certainly is the fastest in terms of time spent in code development. Here we will use R as a wrapper to load in external tools. This course assumes that users already have basic knowledge of R.
 
 I generally tried to avoid replicating things that are already openly available online through other resources. Thus, if you are interested in more or other training materials regarding spatial data and analyses in R, check out the resources link at the top with more examples and free self-learning tutorials.
-
-
