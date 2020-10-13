@@ -379,27 +379,21 @@ div.tocify {
     <li>
       <a href="02_raster.html">2 - Raster data</a>
     </li>
-    <li>
-      <a href="03_multidim.html">3 - Multidimensional data</a>
-    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Analysing spatial data</li>
     <li>
-      <a href="04_manip.html">4 - Spatial manipulations</a>
+      <a href="03_manip.html">3 - Spatial manipulations</a>
     </li>
     <li>
-      <a href="05_extractoverlay.html">5 - Overlays and extractions</a>
+      <a href="04_extractoverlay.html">4 - Overlays and extractions</a>
     </li>
     <li>
-      <a href="06_extools.html">6 - External tools</a>
+      <a href="05_extools.html">5 - External tools</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Spatial visualization</li>
     <li>
-      <a href="07_tmap.html">7 - Thematic maps</a>
-    </li>
-    <li>
-      <a href="08_mapview.html">8 - Interactive maps</a>
+      <a href="06_tmap.html">6 - Thematic and interactive maps</a>
     </li>
   </ul>
 </li>
@@ -441,10 +435,10 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Working with raster data</h1>
 <p>Raster data in R can be loaded in a relatively straight forward way using the <strong>raster</strong> package. There are other ways of loading raster data, including implementations in <strong>sp</strong>, where raster data can be formatted as ‘SpatialPixelsDataFrame()’.</p>
 <p>The <strong>raster</strong> package is still the most widely used package though, although it is increasingly being replaced by an approach that is based on a tidy concept (separating raw data from metadata and spatial information). More on this later</p>
-<p>First, lets load the raster package and some first data</p>
-<pre class="r"><code>library(raster)
-
-# The data to load is from Jung et al. (2020), https://www.nature.com/articles/s41597-020-00599-8
+<p>First, lets load the raster package and some first prepared data. If the loading below does not work, download the tif <a href="ht_004_clipped.tif"> here</a> or from the repository</p>
+<pre class="r"><code>library(raster)</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre class="r"><code># The data to load is from Jung et al. (2020), https://www.nature.com/articles/s41597-020-00599-8
 # I have prepared a subset for the Alpes to load in here. 
 # These contain the fraction (multiplied with 1000) of a grid cell containing forest or arti at 1km. 
 
@@ -455,10 +449,15 @@ class(ras)</code></pre>
 <pre><code>## [1] &quot;RasterLayer&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;raster&quot;</code></pre>
-<pre class="r"><code># Plot the raster data
+<pre class="r"><code># Note that the range of values is loaded by default to the minimum and maximum possible
+# Reset like this
+ras &lt;- setMinMax(ras)
+# -&gt; range of values 1 - 1000
+
+# Plot the raster data
 plot(ras, col = topo.colors(100))</code></pre>
 <p><img src="02_raster_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
-<p>Here we loaded in the first band of the data as Raster object, but there are others (more about this in <a href="multidim.html">multidimensional</a>).</p>
+<p>Here we loaded in the first band of the data as Raster object, but there are others (more about this below).</p>
 <div class="well">
 <p>Can you load in and plot the second band (artifical landscapes)?</p>
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">
@@ -467,9 +466,426 @@ Show Solution
 <div id="demo1" class="collapse">
 <pre class="r"><code>ras_crop &lt;- raster(&#39;ht_004_clipped.tif&#39;,layer = 2)
 
-plot(ras, col = heat.colors(100))</code></pre>
+plot(ras, col = rev(heat.colors(100)))</code></pre>
 <p><img src="02_raster_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
 </div>
+</div>
+<div id="raster-information" class="section level2">
+<h2><span class="header-section-number">1.1</span> Raster information</h2>
+<p>There are multiple functions to assess the metadata associated with a raster</p>
+<pre class="r"><code># Plot the extent
+extent(ras)</code></pre>
+<pre><code>## class      : Extent 
+## xmin       : 7.377105 
+## xmax       : 16.67129 
+## ymin       : 43.44738 
+## ymax       : 48.96765</code></pre>
+<pre class="r"><code># How many rows and columns are there? How many cells
+nrow(ras)</code></pre>
+<pre><code>## [1] 557</code></pre>
+<pre class="r"><code>ncol(ras)</code></pre>
+<pre><code>## [1] 937</code></pre>
+<pre class="r"><code>ncell(ras)</code></pre>
+<pre><code>## [1] 521909</code></pre>
+<pre class="r"><code># We can also define a custom function to work with raster data information
+# This one here converts the extent to a WKT bounding box object
+bbox2wkt &lt;- function(bbox=NULL){
+  if(!is.null(bbox)) bbox &lt;- c(bbox[1], bbox[3], bbox[2], bbox[4]) else stop(&#39;Provide a an extent object&#39;)
+  stopifnot(length(bbox)==4) #check for 4 digits
+  paste(&#39;POLYGON((&#39;, 
+        sprintf(&#39;%s %s&#39;,bbox[1],bbox[2]), &#39;,&#39;, sprintf(&#39;%s %s&#39;,bbox[3],bbox[2]), &#39;,&#39;, 
+        sprintf(&#39;%s %s&#39;,bbox[3],bbox[4]), &#39;,&#39;, sprintf(&#39;%s %s&#39;,bbox[1],bbox[4]), &#39;,&#39;, 
+        sprintf(&#39;%s %s&#39;,bbox[1],bbox[2]), 
+        &#39;))&#39;, sep=&quot;&quot;)
+}
+# Print the extent in WKT format
+bbox2wkt(extent(ras))</code></pre>
+<pre><code>## [1] &quot;POLYGON((7.377105383 43.447384894,16.671291018 43.447384894,16.671291018 48.967647157,7.377105383 48.967647157,7.377105383 43.447384894))&quot;</code></pre>
+<div class="well">
+<p>Now we want to know what the mean fraction of forest across the scene is? To do so you first need to convert the units to fractions (0-1) and then calculate a mean using the function ‘cellStats()’. Check the help to see how to use this function via <code>?cellStats</code></p>
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">
+Show Solution
+</button>
+<div id="demo2" class="collapse">
+<pre class="r"><code># Calculate fractions
+ras_frac &lt;- ras / 1000
+
+cellStats(x = ras_frac,stat = &#39;mean&#39;)</code></pre>
+<pre><code>## [1] 0.4230384</code></pre>
+<pre class="r"><code># On average grid cells with some level of forest area</code></pre>
+</div>
+</div>
+</div>
+<div id="convert-rasters-to-other-formats" class="section level2">
+<h2><span class="header-section-number">1.2</span> Convert rasters to other formats</h2>
+<p>In essence raster files are just large matrices, thus it is relatively straight forward to convert the raster object to other common r data formats</p>
+<pre class="r"><code># One can access all raster data like this
+ras[] # Careful, large file!
+
+# or all coordinates
+coordinates(ras)
+
+# Convert to matrix
+mat &lt;- as.matrix(ras)
+
+# Or to data.frame. Here we set the option xy to TRUE, which saves the coordinates of each cell as well
+df &lt;- as.data.frame(ras,xy = TRUE)</code></pre>
+<p>Similarly the raster data can be manipulated by accessing the raw data</p>
+<pre class="r"><code># For instance, suppose we want to set all cells with values lower than 500 (50%) to NA (No data)
+# CAREFUL: This overwrites the original data in R!
+ras[ras &lt; 500] &lt;- NA
+
+# Plot
+plot(ras)</code></pre>
+<p><img src="02_raster_files/figure-html/unnamed-chunk-7-1.png" /><!-- --></p>
+</div>
+<div id="writing-rasters" class="section level2">
+<h2><span class="header-section-number">1.3</span> Writing rasters</h2>
+<p>Finally we going to write the output as new raster</p>
+<pre class="r"><code># What is the data type of the raster?
+dataType(ras)</code></pre>
+<pre><code>## [1] &quot;INT2U&quot;</code></pre>
+<pre class="r"><code># The output data type decides how you can save the raster most space efficiently.
+# If you have for instance an integer raster, then it is a waste of space saving it with floating point precision.
+
+# Here is a list of all output formats your system supports via the gdal library
+knitr::kable(writeFormats() )</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">long_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">raster</td>
+<td align="left">R-raster</td>
+</tr>
+<tr class="even">
+<td align="left">SAGA</td>
+<td align="left">SAGA GIS</td>
+</tr>
+<tr class="odd">
+<td align="left">IDRISI</td>
+<td align="left">IDRISI</td>
+</tr>
+<tr class="even">
+<td align="left">IDRISIold</td>
+<td align="left">IDRISI (img/doc)</td>
+</tr>
+<tr class="odd">
+<td align="left">BIL</td>
+<td align="left">Band by Line</td>
+</tr>
+<tr class="even">
+<td align="left">BSQ</td>
+<td align="left">Band Sequential</td>
+</tr>
+<tr class="odd">
+<td align="left">BIP</td>
+<td align="left">Band by Pixel</td>
+</tr>
+<tr class="even">
+<td align="left">ascii</td>
+<td align="left">Arc ASCII</td>
+</tr>
+<tr class="odd">
+<td align="left">CDF</td>
+<td align="left">NetCDF</td>
+</tr>
+<tr class="even">
+<td align="left">ADRG</td>
+<td align="left">ARC Digitized Raster Graphics</td>
+</tr>
+<tr class="odd">
+<td align="left">BMP</td>
+<td align="left">MS Windows Device Independent Bitmap</td>
+</tr>
+<tr class="even">
+<td align="left">BT</td>
+<td align="left">VTP .bt (Binary Terrain) 1.3 Format</td>
+</tr>
+<tr class="odd">
+<td align="left">BYN</td>
+<td align="left">Natural Resources Canada’s Geoid</td>
+</tr>
+<tr class="even">
+<td align="left">CTable2</td>
+<td align="left">CTable2 Datum Grid Shift</td>
+</tr>
+<tr class="odd">
+<td align="left">EHdr</td>
+<td align="left">ESRI .hdr Labelled</td>
+</tr>
+<tr class="even">
+<td align="left">ELAS</td>
+<td align="left">ELAS</td>
+</tr>
+<tr class="odd">
+<td align="left">ENVI</td>
+<td align="left">ENVI .hdr Labelled</td>
+</tr>
+<tr class="even">
+<td align="left">ERS</td>
+<td align="left">ERMapper .ers Labelled</td>
+</tr>
+<tr class="odd">
+<td align="left">FITS</td>
+<td align="left">Flexible Image Transport System</td>
+</tr>
+<tr class="even">
+<td align="left">GPKG</td>
+<td align="left">GeoPackage</td>
+</tr>
+<tr class="odd">
+<td align="left">GS7BG</td>
+<td align="left">Golden Software 7 Binary Grid (.grd)</td>
+</tr>
+<tr class="even">
+<td align="left">GSBG</td>
+<td align="left">Golden Software Binary Grid (.grd)</td>
+</tr>
+<tr class="odd">
+<td align="left">GTiff</td>
+<td align="left">GeoTIFF</td>
+</tr>
+<tr class="even">
+<td align="left">GTX</td>
+<td align="left">NOAA Vertical Datum .GTX</td>
+</tr>
+<tr class="odd">
+<td align="left">HDF4Image</td>
+<td align="left">HDF4 Dataset</td>
+</tr>
+<tr class="even">
+<td align="left">HFA</td>
+<td align="left">Erdas Imagine Images (.img)</td>
+</tr>
+<tr class="odd">
+<td align="left">IDA</td>
+<td align="left">Image Data and Analysis</td>
+</tr>
+<tr class="even">
+<td align="left">ILWIS</td>
+<td align="left">ILWIS Raster Map</td>
+</tr>
+<tr class="odd">
+<td align="left">INGR</td>
+<td align="left">Intergraph Raster</td>
+</tr>
+<tr class="even">
+<td align="left">ISCE</td>
+<td align="left">ISCE raster</td>
+</tr>
+<tr class="odd">
+<td align="left">ISIS2</td>
+<td align="left">USGS Astrogeology ISIS cube (Version 2)</td>
+</tr>
+<tr class="even">
+<td align="left">ISIS3</td>
+<td align="left">USGS Astrogeology ISIS cube (Version 3)</td>
+</tr>
+<tr class="odd">
+<td align="left">KRO</td>
+<td align="left">KOLOR Raw</td>
+</tr>
+<tr class="even">
+<td align="left">LAN</td>
+<td align="left">Erdas .LAN/.GIS</td>
+</tr>
+<tr class="odd">
+<td align="left">Leveller</td>
+<td align="left">Leveller heightfield</td>
+</tr>
+<tr class="even">
+<td align="left">MBTiles</td>
+<td align="left">MBTiles</td>
+</tr>
+<tr class="odd">
+<td align="left">MRF</td>
+<td align="left">Meta Raster Format</td>
+</tr>
+<tr class="even">
+<td align="left">netCDF</td>
+<td align="left">Network Common Data Format</td>
+</tr>
+<tr class="odd">
+<td align="left">NGW</td>
+<td align="left">NextGIS Web</td>
+</tr>
+<tr class="even">
+<td align="left">NITF</td>
+<td align="left">National Imagery Transmission Format</td>
+</tr>
+<tr class="odd">
+<td align="left">NTv2</td>
+<td align="left">NTv2 Datum Grid Shift</td>
+</tr>
+<tr class="even">
+<td align="left">NWT_GRD</td>
+<td align="left">Northwood Numeric Grid Format .grd/.tab</td>
+</tr>
+<tr class="odd">
+<td align="left">PAux</td>
+<td align="left">PCI .aux Labelled</td>
+</tr>
+<tr class="even">
+<td align="left">PCIDSK</td>
+<td align="left">PCIDSK Database File</td>
+</tr>
+<tr class="odd">
+<td align="left">PCRaster</td>
+<td align="left">PCRaster Raster File</td>
+</tr>
+<tr class="even">
+<td align="left">PDF</td>
+<td align="left">Geospatial PDF</td>
+</tr>
+<tr class="odd">
+<td align="left">PDS4</td>
+<td align="left">NASA Planetary Data System 4</td>
+</tr>
+<tr class="even">
+<td align="left">PNM</td>
+<td align="left">Portable Pixmap Format (netpbm)</td>
+</tr>
+<tr class="odd">
+<td align="left">RMF</td>
+<td align="left">Raster Matrix Format</td>
+</tr>
+<tr class="even">
+<td align="left">ROI_PAC</td>
+<td align="left">ROI_PAC raster</td>
+</tr>
+<tr class="odd">
+<td align="left">RRASTER</td>
+<td align="left">R Raster</td>
+</tr>
+<tr class="even">
+<td align="left">RST</td>
+<td align="left">Idrisi Raster A.1</td>
+</tr>
+<tr class="odd">
+<td align="left">SAGA</td>
+<td align="left">SAGA GIS Binary Grid (.sdat, .sg-grd-z)</td>
+</tr>
+<tr class="even">
+<td align="left">SGI</td>
+<td align="left">SGI Image File Format 1.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Terragen</td>
+<td align="left">Terragen heightfield</td>
+</tr>
+</tbody>
+</table>
+<div class="well">
+<p>Can you save the ras object as new file ? The function is called ‘writeRaster’</p>
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo3">
+Show Solution
+</button>
+<div id="demo3" class="collapse">
+<pre class="r"><code>writeRaster(ras, &#39;ht_004_clipped.tif&#39;,
+            # This bit is extra. Here we specify that the output should be compressed
+            options=c(&quot;COMPRESS=DEFLATE&quot;))</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="multidimensional-rasters" class="section level1">
+<h1><span class="header-section-number">2</span> Multidimensional rasters</h1>
+<p>Above we have overwritten the original data object. You might have also noticed that the provided raster file contains two bands, one forest and one for artifical landscapes Let’s load it back again, but this time as multidimensional raster <strong>stack</strong></p>
+<pre class="r"><code>library(raster)
+ras &lt;- stack(&#39;ht_004_clipped.tif&#39;)
+
+# Notice the difference in class
+class(ras)</code></pre>
+<pre><code>## [1] &quot;RasterStack&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;raster&quot;</code></pre>
+<pre class="r"><code># When plotted, by default all layers are shown
+plot(ras)</code></pre>
+<p><img src="02_raster_files/figure-html/unnamed-chunk-10-1.png" /><!-- --></p>
+<p>However quite often these stacks are provided in formats that require other wrapper packages. I have saved the above file also in NetCDF (Network Common Data Form) format (<a href="https://en.wikipedia.org/wiki/NetCDF" class="uri">https://en.wikipedia.org/wiki/NetCDF</a>), which is a self-describing data format that supports for instance metadata.</p>
+<p>Generally these data are a convenient format to store spatial-temporal information or other spatial data with more than two axes (for instance depth or height in addition to coordinates). The file can be found <a href="ht_004_clipped.nc"> here</a>.</p>
+<pre class="r"><code>library(ncdf4)
+# When the ncdf4 package is installed, nc files should be loadable directly with raster
+# (might spit out a few warnings though)
+ras &lt;- raster(&#39;ht_004_clipped.nc&#39;)</code></pre>
+<pre><code>## Warning in .varName(nc, varname, warn = warn): varname used is: Band1
+## If that is not correct, you can set it to one of: Band1, Band2</code></pre>
+<pre><code>## Warning in .getCRSfromGridMap4(atts): cannot process these parts of the CRS:
+## long_name=CRS definition
+## spatial_ref=GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AXIS[&quot;Latitude&quot;,NORTH],AXIS[&quot;Longitude&quot;,EAST],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]
+## GeoTransform=7.377105383 0.00991908819103522 0 48.967647157 0 -0.009910704242369837</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded
+## datum unknown in CRS definition
+
+## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded
+## datum unknown in CRS definition</code></pre>
+<pre class="r"><code># Another way to open these files are the functions from the ncdf4 package
+ras &lt;- nc_open(&#39;ht_004_clipped.nc&#39;)
+
+# This format looks a bit different
+# Notice how there are variables, dimensions and global attributes
+ras</code></pre>
+<pre><code>## File ht_004_clipped.nc (NC_FORMAT_CLASSIC):
+## 
+##      3 variables (excluding dimension variables):
+##         float Band1[lon,lat]   
+##             long_name: GDAL Band Number 1
+##             _FillValue: 0
+##             grid_mapping: crs
+##         float Band2[lon,lat]   
+##             long_name: GDAL Band Number 2
+##             _FillValue: 0
+##             grid_mapping: crs
+##         char crs[]   
+##             grid_mapping_name: latitude_longitude
+##             long_name: CRS definition
+##             longitude_of_prime_meridian: 0
+##             semi_major_axis: 6378137
+##             inverse_flattening: 298.257223563
+##             spatial_ref: GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AXIS[&quot;Latitude&quot;,NORTH],AXIS[&quot;Longitude&quot;,EAST],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]
+##             GeoTransform: 7.377105383 0.00991908819103522 0 48.967647157 0 -0.009910704242369837 
+## 
+##      2 dimensions:
+##         lon  Size:937
+##             standard_name: longitude
+##             long_name: longitude
+##             units: degrees_east
+##         lat  Size:557
+##             standard_name: latitude
+##             long_name: latitude
+##             units: degrees_north
+## 
+##     4 global attributes:
+##         Conventions: CF-1.5
+##         GDAL: GDAL 3.0.4, released 2020/01/28
+##         history: Mo Okt 12 14:45:47 2020: GDAL Create( /mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/ht_004_clipped.nc, ... )
+##         description: This file contains data on forested and artifical habitats</code></pre>
+<p>What we going to do now is to save an attribute directly to the file, that specifies the type of data contained in the file.</p>
+<pre class="r"><code># Description
+desc &lt;- &#39;This file contains data on forested and artifical habitats&#39;
+
+# Reopen the file in write mode
+ras &lt;- nc_open(&#39;ht_004_clipped.nc&#39;,write = TRUE)
+# We are writing a global attribute with the description of the file
+ncatt_put(nc = ras,varid = 0 ,attname = &#39;description&#39;,attval = desc)
+# And close
+nc_close(ras)
+
+# Now load again to check that the description is there
+ras &lt;- nc_open(&#39;ht_004_clipped.nc&#39;)
+ras</code></pre>
+<p>More data manipulation functions with this format can be found in the help files (?ncdf4).</p>
+<div id="multidimensional-rasters-with-stars" class="section level2">
+<h2><span class="header-section-number">2.1</span> Multidimensional rasters with stars</h2>
+</div>
+<div id="splitting-up-your-processing-into-tiles" class="section level2">
+<h2><span class="header-section-number">2.2</span> Splitting up your processing into tiles</h2>
+<p>The raster package can be slow, especially if your files are large. Splitting them up in tiles is usually a good idea for processing. There is an upcoming replacement package called <a href="https://github.com/rspatial/terra">terra</a> that aims to implement most raster packages in</p>
 </div>
 </div>
 

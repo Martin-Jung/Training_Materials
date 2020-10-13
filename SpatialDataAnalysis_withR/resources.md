@@ -6,7 +6,7 @@ output:
     theme: yeti
 ---
 
-If you haven't got enough, then here more excellent (free) resources to deepen your knowledge
+If you haven't got enough, then here are more excellent (free) resources to deepen your knowledge
 
 <br>
 

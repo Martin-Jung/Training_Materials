@@ -14,22 +14,18 @@ left:
         href: 01_vector.html
       - text: "2 - Raster data"
         href: 02_raster.html
-      - text: "3 - Multidimensional data"
-        href: 03_multidim.html
       - text: "-----------------"
       - text: "Analysing spatial data"
-      - text: "4 - Spatial manipulations"
-        href: 04_manip.html
-      - text: "5 - Overlays and extractions"
-        href: 05_extractoverlay.html
-      - text: "6 - External tools"
-        href: 06_extools.html
+      - text: "3 - Spatial manipulations"
+        href: 03_manip.html
+      - text: "4 - Overlays and extractions"
+        href: 04_extractoverlay.html
+      - text: "5 - External tools"
+        href: 05_extools.html
       - text: "-----------------"
       - text: "Spatial visualization"
-      - text: "7 - Thematic maps"
-        href: 07_tmap.html
-      - text: "8 - Interactive maps"
-        href: 08_mapview.html
+      - text: "6 - Thematic and interactive maps"
+        href: 06_tmap.html
   - text: "Resources"
     href: resources.html
 right:

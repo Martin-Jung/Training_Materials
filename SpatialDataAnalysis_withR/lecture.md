@@ -1,5 +1,5 @@
 ---
-title: "lecture"
+title: "Introduction lecture"
 output: html_document
 ---
 

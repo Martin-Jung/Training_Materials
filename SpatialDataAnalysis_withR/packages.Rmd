@@ -5,7 +5,7 @@ output:
     theme: yeti
 ---
 
-To work with spatial data in R, you require to have a number of packages installed. Packages are the main way in R to distribute and run other peoples code.
+To work with spatial data in R, you have to have a number of packages installed. Packages are the main way in R to distribute and run other peoples code.
 For this tutorial to work you need to sucessfully (e.g. without any errors) install the following packages:
 
 ```{r, eval=FALSE}
