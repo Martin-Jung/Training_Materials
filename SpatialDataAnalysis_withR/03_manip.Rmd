@@ -16,6 +16,22 @@ knitr::opts_chunk$set(cache=TRUE)
 [<i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here](`r output`).  Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.  
 
 # Vector manipulations
+  
+As discussed in the [lecture](slides.pdf), 
 
-As discussed in the lecture
+
+<div class="well">
+Can you make a buffer of all points in the cities dataset?
+
+
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">Show Solution</button>
+<div id="demo1" class="collapse">
+```{r, purl=F}
+plot(dat)
+
+class(dat)
+```
+Well done. 
+</div>
+</div>
 
