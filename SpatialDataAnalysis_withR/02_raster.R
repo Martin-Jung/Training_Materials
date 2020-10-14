@@ -211,9 +211,70 @@ ras
 #' 
 #' ## Multidimensional rasters with stars
 #' 
+#' The raster package can be slow, especially if your files are large. Splitting them up in tiles is usually a good idea for processing. There is an upcoming replacement package called [terra](https://github.com/rspatial/terra) that aims to implement most raster packages functions in faster, more efficient code.
+#' 
+#' Another new package of loading and analysing multidimensional data is the [**stars** package](https://r-spatial.github.io/stars/). This new package specifically aims at processing multidimensional rasters and works with netCDF files too.
+#' 
+## -----------------------------------------------------------------------------
+library(stars)
+
+# Load in the ncdf or tif file
+ras <- read_stars('ht_004_clipped.tif')
+
+ras
+
+plot(ras,
+     downsample = TRUE # Show only as many colours as fit in the pixel size of the image
+     )
+
+#' 
+#' Another very useful feature of **stars** is that it allows to read in lazy object. This is particularly useful for very large files. The object can be created and investigated even without loading all data into memory. Only if any calculation requires the data stored within the **stars** object, it is loaded into memory. 
 #' 
 #' 
-#' ## Splitting up your processing into tiles
+## -----------------------------------------------------------------------------
+ras <- read_stars('ht_004_clipped.tif',proxy = TRUE)
+
+# There are also ways to load in for instance only a specific area (bbox) or range of the data into R.
+
 #' 
-#' The raster package can be slow, especially if your files are large. Splitting them up in tiles is usually a good idea for processing. There is an upcoming replacement package called [terra](https://github.com/rspatial/terra) that aims to implement most raster packages in 
 #' 
+#' If you are familiar with the methods of the **tidyverse** family of packages:
+#' **Stars** objects interact with a number of functions from these package. For instance, here is how I would select the top 100 cell values (e.g. those from left to right) from the stars object for band 1 (Forest) and plot it
+#' 
+## -----------------------------------------------------------------------------
+suppressPackageStartupMessages(library(tidyverse))
+# Take the raster object and 'pipe' into slice for the y-coordinate (Latitude)
+ras %>% slice(y, 1:100) %>% 
+  # Filter to band 1
+  filter(band == 1) %>% 
+  # Plot the output of the chain
+  plot()
+
+# Note that nothing is saved as part of this processing chain, although one obviously could save the output in a new object.
+
+# Equally one access the attributes and dimensions of any stars object
+# The first arguement to any stars object is the attribute (could be time), the next the dimensions
+# For instance if I want to plot the first 20 values (upper left corner), here is how
+plot(ras[,1:10,1:20])
+
+
+#' 
+#' See here for a number of functions provided by the stars package. Some of which we will explore later on. 
+#' (Can you find the function that lets you write a stars file?)
+#' 
+## -----------------------------------------------------------------------------
+# All functions of the stars package
+methods(class = "stars")
+
+#' 
+#' <div class="well">
+#' Final exercise:
+#' Remember the outline of Laxenburg park that was saved in the [vector](01_vector.html) exercise? 
+#' Take the artifical dataset loaded via stars and clip it to the bounding box of the Laxenburg park!
+#' 
+#' <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo4">Show Solution</button>
+#' <div id="demo4" class="collapse">
+
+#' 
+#' </div>
+#' </div>

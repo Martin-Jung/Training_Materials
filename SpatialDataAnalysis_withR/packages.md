@@ -15,6 +15,7 @@ install.packages('rgdal') # Interface to the gdal library in R
 install.packages('raster') # To load raster data in R
 install.packages('sf') # The sucessor to the sp package - tidy vector data
 install.packages('stars') # The sucessor to the raster package - tidy raster data
+install.packages('ncmeta') # Required for stars ncdf support
 install.packages('ncdf4') # For loading the propertiary ncdf format
 
 install.packages('rgeos') # Wrapper for the GEOS library

@@ -1,0 +1,21 @@
+---
+title: "Spatial manipulations"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r, echo=FALSE, message=FALSE, results='hide', purl=FALSE}
+## This chunk automatically generates a text .R version of this script when running within knitr.  You do not need to run this...
+input  = knitr::current_input()  # filename of input document
+output = paste(tools::file_path_sans_ext(input), 'R', sep = '.')
+knitr::purl(input,output,documentation=2,quiet=T,envir=new.env())
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+[<i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here](`r output`).  Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.  
+
+# Vector manipulations
+
+As discussed in the lecture
+

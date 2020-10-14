@@ -171,8 +171,7 @@ cities <- readOGR(dsn=dsn, layer="cities")
 
 #' 
 #' <div class="well">
-#' Can you load and write the previously created laxenburg park data used above (as WKT) and save it as geopackage.
-#' To check the name for geopackage drivers, see the output from ogrDrivers() above.
+#' Can you load and write the previously created laxenburg park data used above (as WKT) and save it (any format you like)?
 #' 
 #' <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo4">Show Solution</button>
 #' <div id="demo4" class="collapse">
@@ -211,7 +210,7 @@ head(nc, 6)
 plot(nc['SID74'])
 
 #' 
-#' Writing outputs in sf is equally straight forward
+#' Writing outputs in sf is equally straight forward.
 #' 
 ## ---- eval = FALSE------------------------------------------------------------
 ## # If you want to write this into a folder called myfolder
@@ -219,6 +218,7 @@ plot(nc['SID74'])
 ## 
 ## # You can also output the geometry data in WKT format
 ## st_as_text(nc$geom)
+## 
 
 #' 
 #' Sometimes a function or r-package creates outputs that are not in sf format. These need to be converted to sf before being able to use them in tidy format.

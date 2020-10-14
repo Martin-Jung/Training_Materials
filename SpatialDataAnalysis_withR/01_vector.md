@@ -342,8 +342,7 @@ writeOGR(cities,dsn = output_folder, layer = output_name ,driver = "ESRI Shapefi
 ```
 
 <div class="well">
-Can you load and write the previously created laxenburg park data used above (as WKT) and save it as geopackage.
-To check the name for geopackage drivers, see the output from ogrDrivers() above.
+Can you load and write the previously created laxenburg park data used above (as WKT) and save it (any format you like)?
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo4">Show Solution</button>
 <div id="demo4" class="collapse">
@@ -358,11 +357,13 @@ lax <- 'POLYGON ((16.3594574385736 48.0702355060673,16.3609882350041 48.06946831
 laxpol <- readWKT(lax)
 
 # Convert to data.frame
-laxpol <- SpatialPolygonsDataFrame(laxpol, data = data.frame(name = 'Laxenburg park') )
+laxpol <- SpatialPolygonsDataFrame(laxpol, data = data.frame(ID = 1, name = 'Laxenburg park') )
 proj4string(laxpol) <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
 
 # Write the output
-writeOGR(obj = laxpol,dsn = '.', layer = 'Laxenburg',driver = 'GPKG')
+writeOGR(laxpol,dsn = '.',layer = 'Laxenburg',driver = "ESRI Shapefile")
+# or as GPKG, using the database as folder
+writeOGR(laxpol,dsn = 'Laxenburg.gpkg',layer = 'Laxenburg',driver = "GPKG")
 ```
 Well done!
 </div>
@@ -429,7 +430,7 @@ plot(nc['SID74'])
 
 ![](01_vector_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
-Writing outputs in sf is equally straight forward
+Writing outputs in sf is equally straight forward.
 
 
 ```r
@@ -457,6 +458,9 @@ sf_laxpol <- st_as_sf(laxpol)
 
 # The area in m2
 st_area(sf_laxpol)
+
+# Similarly one can write the laxenburg data to geopackage easily with sf
+st_write(new_sf, 'Laxenburg.gpkg')
 ```
 Area calculations using the sf package use the 'units' package to assign a unit in R to vector of numeric values.
 You should get in result of ~2.2 Million ha

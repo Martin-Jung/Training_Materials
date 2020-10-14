@@ -379,27 +379,21 @@ div.tocify {
     <li>
       <a href="02_raster.html">2 - Raster data</a>
     </li>
-    <li>
-      <a href="03_multidim.html">3 - Multidimensional data</a>
-    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Analysing spatial data</li>
     <li>
-      <a href="04_manip.html">4 - Spatial manipulations</a>
+      <a href="03_manip.html">3 - Spatial manipulations</a>
     </li>
     <li>
-      <a href="05_extractoverlay.html">5 - Overlays and extractions</a>
+      <a href="04_extractoverlay.html">4 - Overlays and extractions</a>
     </li>
     <li>
-      <a href="06_extools.html">6 - External tools</a>
+      <a href="05_extools.html">5 - External tools</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Spatial visualization</li>
     <li>
-      <a href="07_tmap.html">7 - Thematic maps</a>
-    </li>
-    <li>
-      <a href="08_mapview.html">8 - Interactive maps</a>
+      <a href="06_tmap.html">6 - Thematic and interactive maps</a>
     </li>
   </ul>
 </li>
@@ -1229,7 +1223,7 @@ output_folder = &#39;.&#39; # a dot is for the current folder
 output_name = &#39;new_cities&#39; # the output name
 writeOGR(cities,dsn = output_folder, layer = output_name ,driver = &quot;ESRI Shapefile&quot;)</code></pre>
 <div class="well">
-<p>Can you load and write the previously created laxenburg park data used above (as WKT) and save it as geopackage. To check the name for geopackage drivers, see the output from ogrDrivers() above.</p>
+<p>Can you load and write the previously created laxenburg park data used above (as WKT) and save it (any format you like)?</p>
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo4">
 Show Solution
 </button>
@@ -1242,11 +1236,13 @@ lax &lt;- &#39;POLYGON ((16.3594574385736 48.0702355060673,16.3609882350041 48.0
 laxpol &lt;- readWKT(lax)
 
 # Convert to data.frame
-laxpol &lt;- SpatialPolygonsDataFrame(laxpol, data = data.frame(name = &#39;Laxenburg park&#39;) )
+laxpol &lt;- SpatialPolygonsDataFrame(laxpol, data = data.frame(ID = 1, name = &#39;Laxenburg park&#39;) )
 proj4string(laxpol) &lt;- &#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;
 
 # Write the output
-writeOGR(obj = laxpol,dsn = &#39;.&#39;, layer = &#39;Laxenburg&#39;,driver = &#39;GPKG&#39;)</code></pre>
+writeOGR(laxpol,dsn = &#39;.&#39;,layer = &#39;Laxenburg&#39;,driver = &quot;ESRI Shapefile&quot;)
+# or as GPKG, using the database as folder
+writeOGR(laxpol,dsn = &#39;Laxenburg.gpkg&#39;,layer = &#39;Laxenburg&#39;,driver = &quot;GPKG&quot;)</code></pre>
 <p>Well done!</p>
 </div>
 </div>
@@ -1279,7 +1275,7 @@ head(nc, 6)</code></pre>
 <p>Similarly, individual (or multiple) can be plotted by adressing them as you would adress an item in a list object So</p>
 <pre class="r"><code>plot(nc[&#39;SID74&#39;])</code></pre>
 <p><img src="01_vector_files/figure-html/unnamed-chunk-16-1.png" /><!-- --></p>
-<p>Writing outputs in sf is equally straight forward</p>
+<p>Writing outputs in sf is equally straight forward.</p>
 <pre class="r"><code># If you want to write this into a folder called myfolder
 st_write(nc, paste0(&#39;myfolder&#39;, &quot;/&quot;, &quot;nc.shp&quot;) )
 
@@ -1296,7 +1292,10 @@ Show Solution
 sf_laxpol &lt;- st_as_sf(laxpol)
 
 # The area in m2
-st_area(sf_laxpol)</code></pre>
+st_area(sf_laxpol)
+
+# Similarly one can write the laxenburg data to geopackage easily with sf
+st_write(new_sf, &#39;Laxenburg.gpkg&#39;)</code></pre>
 <p>Area calculations using the sf package use the ‘units’ package to assign a unit in R to vector of numeric values. You should get in result of ~2.2 Million ha</p>
 </div>
 </div>
