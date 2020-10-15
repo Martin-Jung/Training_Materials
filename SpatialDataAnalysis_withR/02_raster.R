@@ -276,5 +276,12 @@ methods(class = "stars")
 #' <div id="demo4" class="collapse">
 
 #' 
+#' 
 #' </div>
 #' </div>
+#' 
+#' Another big field of application for **stars** is the analysis of multi-temporal raster stacks or data-cubes. Custom-written function can then be easily applied to entire stacks of rasters, e.g. `stars::st_apply()`. We don't explore this as part of this tutorial, but have a look at the **stars** website for some example code.
+#' 
+#' 
+#' <img src='https://raw.githubusercontent.com/r-spatial/stars/master/images/cube1.png'></img>
+#' (source: https://r-spatial.github.io/stars/)

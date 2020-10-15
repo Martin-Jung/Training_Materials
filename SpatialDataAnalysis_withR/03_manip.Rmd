@@ -17,21 +17,123 @@ knitr::opts_chunk$set(cache=TRUE)
 
 # Vector manipulations
   
-As discussed in the [lecture](slides.pdf), 
+As mentioned in the [lecture](slides.pdf), vector files can be manipulated in a number of way with regards to their geometry. Examples include for instance combining, dissolving or splitting geometries.
+A full list of methods can be queried via `methods(class = "sf")` and looked up via `?sf_combine` and similar
+
+```{r}
+library(dplyr)
+library(sf)
+# Load the example shapefile provided as part of the sf package
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+
+# 100 Features in here
+# nrow(nc)
+
+# Combine all features
+nc1 <- nc %>% st_union()
+
+# Get boundary of the unified polygon
+nc2 <- nc1 %>% st_boundary()
+
+# Simplify the boundaries
+nc3 <- st_simplify(nc2,dTolerance = 0.1)
+
+#  Calculate centroids of each polygon and transform them to a pseudo-mercator
+nc4 <- nc %>% 
+  st_centroid() %>% 
+  st_transform("+init=epsg:3857")
+
+# Finally buffer each point by ~1000m
+# NOTE: For this to work correctly the projection should be meter based!
+nc5 <- st_buffer(nc4, 1000)
+
+# Note how attributes are maintained
+nc5
+# Try and plot some of the created new objects above
+```
+
+
+It is also easily possible to create new datasets based on existing geometries.
+
+```{r}
+# Make a grid overall features
+x1 <- st_make_grid(nc, n = c(25,25))
+
+# Sample 100 points with the grid
+x2 <- st_sample(x1, 100)
+
+plot(x1)
+plot(x2,add=TRUE)
+```
 
 
 <div class="well">
-Can you make a buffer of all points in the cities dataset?
-
+Take the laxenburg polygon from the [vector](01_vector.html) session, project and buffer the polygon by 10.000m (10km).
 
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">Show Solution</button>
 <div id="demo1" class="collapse">
-```{r, purl=F}
-plot(dat)
+```{r, purl=F, eval =FALSE}
+# Get the data
+laxpol <- st_read('Laxenburg.gpkg') %>% 
+  st_transform("+init=epsg:3857") %>% 
+  st_buffer(10000)
 
-class(dat)
+plot(laxpol)
 ```
-Well done. 
+
+</div>
+</div>
+
+# Raster manipulations
+
+Raster data can manipulated in a number of ways, which is often necessary for subsequent analyses. For instance when several input layers differ in spatial extent, resolution or projection from another.
+
+Here are some examples how to manipulate raster data directly.
+
+```{r}
+library(raster)
+
+ras <- raster('ht_004_clipped.tif',band = 1)
+ras <- setMinMax(ras)
+
+# Aggregate the raster by a factor of 5 (too 5000m resolution)
+forest <- aggregate(ras, fact = 5)
+
+# Get all values with 95% forest cover
+forest[forest <= 950] <- NA
+# And those above as
+forest[forest >= 950] <- 1
+
+# Get the cells bordering those forest grid cells
+forest <- boundaries(forest,type = 'outer')
+
+plot(forest)
+
+```
+
+<div class="well">
+Can you calculate the area in km² of grid cells with more than 95% forest area?
+
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">Show Solution</button>
+<div id="demo2" class="collapse">
+```{r, purl=F, eval =FALSE}
+
+# Get all values with 95% forest cover
+ras[ras <= 950] <- NA
+# And those above as
+ras[ras >= 950] <- 1
+
+# Calculate the area in km2
+ar <- area(ras)
+
+# Multiple the result with the forest area
+ar <- ras * ar
+
+# The area in km2
+cellStats(ar,'sum')
+
+```
+
 </div>
 </div>
 

@@ -516,21 +516,20 @@ Show Solution
 <div id="loading-and-writing-different-formats-of-vector-data" class="section level1">
 <h1><span class="header-section-number">2</span> Loading and writing different formats of vector data</h1>
 <p>In most cases however the spatial data won’t come in text format, but in some other format that requires separate solutions for loading them in. Here we going to use the <strong>rgdal</strong> package which supports a number of spatial data and is the main background work hose also for <a href="02_raster.html">raster</a> data.</p>
-<pre><code>## rgdal: version: 1.5-16, (SVN revision 1050)
+<pre><code>## rgdal: version: 1.5-12, (SVN revision 1018)
 ## Geospatial Data Abstraction Library extensions to R successfully loaded
 ## Loaded GDAL runtime: GDAL 3.0.4, released 2020/01/28
-## Path to GDAL shared files: /usr/share/gdal
+## Path to GDAL shared files: C:/Users/Martin/Documents/R/win-library/4.0/rgdal/gdal
 ## GDAL binary built with GEOS: TRUE 
-## Loaded PROJ runtime: Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]
-## Path to PROJ shared files: /home/martin/.local/share/proj:/usr/share/proj
-## PROJ CDN enabled: FALSE
+## Loaded PROJ runtime: Rel. 6.3.1, February 10th, 2020, [PJ_VERSION: 631]
+## Path to PROJ shared files: C:/Users/Martin/Documents/R/win-library/4.0/rgdal/proj
 ## Linking to sp version:1.4-2
 ## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
 ## use options(&quot;rgdal_show_exportToProj4_warnings&quot;=&quot;none&quot;) before loading rgdal.</code></pre>
 <table>
 <colgroup>
 <col width="15%" />
-<col width="63%" />
+<col width="62%" />
 <col width="6%" />
 <col width="6%" />
 <col width="9%" />
@@ -728,85 +727,71 @@ Show Solution
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">GMLAS</td>
-<td align="left">Geography Markup Language (GML) driven by application schemas</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="even">
 <td align="left">GPKG</td>
 <td align="left">GeoPackage</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">GPSBabel</td>
 <td align="left">GPSBabel</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
+<tr class="odd">
+<td align="left">GPSTrackMaker</td>
+<td align="left">GPSTrackMaker</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+</tr>
 <tr class="even">
-<td align="left">GPSTrackMaker</td>
-<td align="left">GPSTrackMaker</td>
+<td align="left">GPX</td>
+<td align="left">GPX</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">GPX</td>
-<td align="left">GPX</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="even">
 <td align="left">HTF</td>
 <td align="left">Hydrographic Transfer Vector</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">HTTP</td>
 <td align="left">HTTP Fetching Wrapper</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Idrisi</td>
 <td align="left">Idrisi Vector (.vct)</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
-<td align="left">Interlis 1</td>
-<td align="left">Interlis 1</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
 <tr class="even">
-<td align="left">Interlis 2</td>
-<td align="left">Interlis 2</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="odd">
 <td align="left">JML</td>
 <td align="left">OpenJUMP JML</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">JP2OpenJPEG</td>
 <td align="left">JPEG-2000 driver based on OpenJPEG library</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">JPEG2000</td>
+<td align="left">JPEG-2000 part 1 (ISO/IEC 15444-1), based on Jasper library</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
@@ -819,58 +804,44 @@ Show Solution
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">LIBKML</td>
-<td align="left">Keyhole Markup Language (LIBKML)</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="odd">
 <td align="left">MapInfo File</td>
 <td align="left">MapInfo File</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">MBTiles</td>
 <td align="left">MBTiles</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Memory</td>
 <td align="left">Memory</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">MSSQLSpatial</td>
 <td align="left">Microsoft SQL Server Spatial Database</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">MVT</td>
 <td align="left">Mapbox Vector Tiles</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
-<td align="left">MySQL</td>
-<td align="left">MySQL</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
 <tr class="odd">
-<td align="left">NAS</td>
-<td align="left">NAS - ALKIS</td>
-<td align="left">FALSE</td>
+<td align="left">MySQL</td>
+<td align="left">MySQL</td>
+<td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
@@ -903,23 +874,9 @@ Show Solution
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">OGR_DODS</td>
-<td align="left">OGR_DODS</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="odd">
 <td align="left">OGR_GMT</td>
 <td align="left">GMT ASCII Vectors (.gmt)</td>
 <td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="even">
-<td align="left">OGR_OGDI</td>
-<td align="left">OGDI Vectors (VPF, VMAP, DCW)</td>
-<td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
@@ -1050,118 +1007,111 @@ Show Solution
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">SOSI</td>
-<td align="left">Norwegian SOSI Standard</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="even">
 <td align="left">SQLite</td>
 <td align="left">SQLite / Spatialite</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SUA</td>
 <td align="left">Tim Newport-Peace’s Special Use Airspace Format</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">SVG</td>
 <td align="left">Scalable Vector Graphics</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SXF</td>
 <td align="left">Storage and eXchange Format</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">TIGER</td>
 <td align="left">U.S. Census TIGER/Line</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
+<tr class="even">
+<td align="left">TopoJSON</td>
+<td align="left">TopoJSON</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+</tr>
 <tr class="odd">
-<td align="left">TopoJSON</td>
-<td align="left">TopoJSON</td>
+<td align="left">UK .NTF</td>
+<td align="left">UK .NTF</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="left">UK .NTF</td>
-<td align="left">UK .NTF</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr class="odd">
 <td align="left">VDV</td>
 <td align="left">VDV-451/VDV-452/INTREST Data Format</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">VFK</td>
 <td align="left">Czech Cadastral Exchange Data Format</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Walk</td>
 <td align="left">Walk</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">WAsP</td>
 <td align="left">WAsP .map format</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">WFS</td>
 <td align="left">OGC WFS (Web Feature Service)</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">WFS3</td>
 <td align="left">OGC WFS 3 client (Web Feature Service)</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">XLS</td>
 <td align="left">MS Excel format</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">XLSX</td>
 <td align="left">MS Office Open XML spreadsheet</td>
 <td align="left">TRUE</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">XPlane</td>
 <td align="left">X-Plane/Flightgear aeronautical data</td>
 <td align="left">FALSE</td>
@@ -1178,8 +1128,8 @@ dsn &lt;- system.file(&quot;vectors&quot;, package = &quot;rgdal&quot;)[1]
 
 # Which layers are in the data source
 ogrListLayers(dsn)</code></pre>
-<pre><code>## [1] &quot;trin_inca_pl03&quot;           &quot;cities&quot;                  
-## [3] &quot;scot_BNG&quot;                 &quot;kiritimati_primary_roads&quot;
+<pre><code>## [1] &quot;cities&quot;                   &quot;kiritimati_primary_roads&quot;
+## [3] &quot;scot_BNG&quot;                 &quot;trin_inca_pl03&quot;          
 ## attr(,&quot;driver&quot;)
 ## [1] &quot;ESRI Shapefile&quot;
 ## attr(,&quot;nlayers&quot;)
@@ -1192,7 +1142,7 @@ Show Solution
 </button>
 <div id="demo3" class="collapse">
 <pre class="r"><code>ogrInfo(dsn=dsn, layer=&quot;cities&quot;)</code></pre>
-<pre><code>## Source: &quot;/home/martin/R/x86_64-pc-linux-gnu-library/3.6/rgdal/vectors&quot;, layer: &quot;cities&quot;
+<pre><code>## Source: &quot;C:\Users\Martin\Documents\R\win-library\4.0\rgdal\vectors&quot;, layer: &quot;cities&quot;
 ## Driver: ESRI Shapefile; number of rows: 606 
 ## Feature type: wkbPoint with 2 dimensions
 ## Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -1210,7 +1160,7 @@ Show Solution
 <pre class="r"><code># To load the cities.shp file. Note that you point to the name of the layer and not the name of the file
 cities &lt;- readOGR(dsn=dsn, layer=&quot;cities&quot;)</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/home/martin/R/x86_64-pc-linux-gnu-library/3.6/rgdal/vectors&quot;, layer: &quot;cities&quot;
+## Source: &quot;C:\Users\Martin\Documents\R\win-library\4.0\rgdal\vectors&quot;, layer: &quot;cities&quot;
 ## with 606 features
 ## It has 4 fields
 ## Integer64 fields read as strings:  POPULATION</code></pre>
@@ -1253,10 +1203,10 @@ writeOGR(laxpol,dsn = &#39;Laxenburg.gpkg&#39;,layer = &#39;Laxenburg&#39;,drive
 <p>The R programming language has in recent years experience some form of revolution that data are treated and formatted as <a href="https://vita.had.co.nz/papers/tidy-data.html">‘tidy’ data</a>.</p>
 <p>Loading spatial data into R using <strong>sf</strong> is comparably easier</p>
 <pre class="r"><code>library(sf)</code></pre>
-<pre><code>## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</code></pre>
+<pre><code>## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</code></pre>
 <pre class="r"><code># Load the default country file coming with sf
 nc &lt;- st_read(system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;))</code></pre>
-<pre><code>## Reading layer `nc.gpkg&#39; from data source `/home/martin/R/x86_64-pc-linux-gnu-library/3.6/sf/gpkg/nc.gpkg&#39; using driver `GPKG&#39;
+<pre><code>## Reading layer `nc.gpkg&#39; from data source `C:\Users\Martin\Documents\R\win-library\4.0\sf\gpkg\nc.gpkg&#39; using driver `GPKG&#39;
 ## Simple feature collection with 100 features and 14 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
@@ -1268,7 +1218,7 @@ nc &lt;- st_read(system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;))<
 head(nc, 6)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["AREA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["PERIMETER"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CNTY_"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CNTY_ID"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["NAME"],"name":[5],"type":["fctr"],"align":["left"]},{"label":["FIPS"],"name":[6],"type":["fctr"],"align":["left"]},{"label":["FIPSNO"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["CRESS_ID"],"name":[8],"type":["int"],"align":["right"]},{"label":["BIR74"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["SID74"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["NWBIR74"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["BIR79"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["SID79"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["NWBIR79"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["geom"],"name":[15],"type":["S3: sfc_MULTIPOLYGON"],"align":["right"]}],"data":[{"1":"0.114","2":"1.442","3":"1825","4":"1825","5":"Ashe","6":"37009","7":"37009","8":"5","9":"1091","10":"1","11":"10","12":"1364","13":"0","14":"19","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"1"},{"1":"0.061","2":"1.231","3":"1827","4":"1827","5":"Alleghany","6":"37005","7":"37005","8":"3","9":"487","10":"0","11":"10","12":"542","13":"3","14":"12","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"2"},{"1":"0.143","2":"1.630","3":"1828","4":"1828","5":"Surry","6":"37171","7":"37171","8":"86","9":"3188","10":"5","11":"208","12":"3616","13":"6","14":"260","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"3"},{"1":"0.070","2":"2.968","3":"1831","4":"1831","5":"Currituck","6":"37053","7":"37053","8":"27","9":"508","10":"1","11":"123","12":"830","13":"2","14":"145","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"4"},{"1":"0.153","2":"2.206","3":"1832","4":"1832","5":"Northampton","6":"37131","7":"37131","8":"66","9":"1421","10":"9","11":"1066","12":"1606","13":"3","14":"1197","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"5"},{"1":"0.097","2":"1.670","3":"1833","4":"1833","5":"Hertford","6":"37091","7":"37091","8":"46","9":"1452","10":"7","11":"954","12":"1838","13":"5","14":"1237","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["AREA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["PERIMETER"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CNTY_"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CNTY_ID"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["NAME"],"name":[5],"type":["chr"],"align":["left"]},{"label":["FIPS"],"name":[6],"type":["chr"],"align":["left"]},{"label":["FIPSNO"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["CRESS_ID"],"name":[8],"type":["int"],"align":["right"]},{"label":["BIR74"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["SID74"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["NWBIR74"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["BIR79"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["SID79"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["NWBIR79"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["geom"],"name":[15],"type":["S3: sfc_MULTIPOLYGON"],"align":["right"]}],"data":[{"1":"0.114","2":"1.442","3":"1825","4":"1825","5":"Ashe","6":"37009","7":"37009","8":"5","9":"1091","10":"1","11":"10","12":"1364","13":"0","14":"19","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"1"},{"1":"0.061","2":"1.231","3":"1827","4":"1827","5":"Alleghany","6":"37005","7":"37005","8":"3","9":"487","10":"0","11":"10","12":"542","13":"3","14":"12","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"2"},{"1":"0.143","2":"1.630","3":"1828","4":"1828","5":"Surry","6":"37171","7":"37171","8":"86","9":"3188","10":"5","11":"208","12":"3616","13":"6","14":"260","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"3"},{"1":"0.070","2":"2.968","3":"1831","4":"1831","5":"Currituck","6":"37053","7":"37053","8":"27","9":"508","10":"1","11":"123","12":"830","13":"2","14":"145","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"4"},{"1":"0.153","2":"2.206","3":"1832","4":"1832","5":"Northampton","6":"37131","7":"37131","8":"66","9":"1421","10":"9","11":"1066","12":"1606","13":"3","14":"1197","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"5"},{"1":"0.097","2":"1.670","3":"1833","4":"1833","5":"Hertford","6":"37091","7":"37091","8":"46","9":"1452","10":"7","11":"954","12":"1838","13":"5","14":"1237","15":"<S3: sfc_MULTIPOLYGON>","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Notice how this new object is both a ‘sf’ object as well as a ‘data.frame’. All the data assigned to this vector table can be used like you would use any other spatial information in a R data.frame, e.g. subsetting, filtering, plotting, etc… Furthermore the geometry is here not saved as part of the R-object but explicitly adressable in the column ‘geom’ using WKT.</p>

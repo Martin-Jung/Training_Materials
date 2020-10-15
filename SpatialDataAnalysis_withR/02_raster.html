@@ -436,9 +436,9 @@ div.tocify {
 <p>Raster data in R can be loaded in a relatively straight forward way using the <strong>raster</strong> package. There are other ways of loading raster data, including implementations in <strong>sp</strong>, where raster data can be formatted as ‘SpatialPixelsDataFrame()’.</p>
 <p>The <strong>raster</strong> package is still the most widely used package though, although it is increasingly being replaced by an approach that is based on a tidy concept (separating raw data from metadata and spatial information). More on this later</p>
 <p>First, lets load the raster package and some first prepared data. If the loading below does not work, download the tif <a href="ht_004_clipped.tif"> here</a> or from the repository</p>
-<pre class="r"><code>library(raster)
-
-# The data to load is from Jung et al. (2020), https://www.nature.com/articles/s41597-020-00599-8
+<pre class="r"><code>library(raster)</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre class="r"><code># The data to load is from Jung et al. (2020), https://www.nature.com/articles/s41597-020-00599-8
 # I have prepared a subset for the Alpes to load in here. 
 # These contain the fraction (multiplied with 1000) of a grid cell containing forest or arti at 1km. 
 
@@ -860,10 +860,11 @@ ras</code></pre>
 ##             long_name: latitude
 ##             units: degrees_north
 ## 
-##     3 global attributes:
+##     4 global attributes:
 ##         Conventions: CF-1.5
 ##         GDAL: GDAL 3.0.4, released 2020/01/28
-##         history: Mo Okt 12 14:45:47 2020: GDAL Create( /mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/ht_004_clipped.nc, ... )</code></pre>
+##         history: Mo Okt 12 14:45:47 2020: GDAL Create( /mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/ht_004_clipped.nc, ... )
+##         description: This file contains data on forested and artifical habitats</code></pre>
 <p>What we going to do now is to save an attribute directly to the file, that specifies the type of data contained in the file.</p>
 <pre class="r"><code># Description
 desc &lt;- &#39;This file contains data on forested and artifical habitats&#39;
@@ -886,7 +887,7 @@ ras</code></pre>
 <pre class="r"><code>library(stars)</code></pre>
 <pre><code>## Loading required package: abind</code></pre>
 <pre><code>## Loading required package: sf</code></pre>
-<pre><code>## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</code></pre>
+<pre><code>## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</code></pre>
 <pre class="r"><code># Load in the ncdf or tif file
 ras &lt;- read_stars(&#39;ht_004_clipped.tif&#39;)
 
@@ -933,8 +934,8 @@ plot(ras[,1:10,1:20])</code></pre>
 <p>See here for a number of functions provided by the stars package. Some of which we will explore later on. (Can you find the function that lets you write a stars file?)</p>
 <pre class="r"><code># All functions of the stars package
 methods(class = &quot;stars&quot;)</code></pre>
-<pre><code>##  [1] [                 [&lt;-               $&lt;-               adrop            
-##  [5] aggregate         aperm             as_tibble         as.data.frame    
+<pre><code>##  [1] $&lt;-               [                 [&lt;-               adrop            
+##  [5] aggregate         aperm             as.data.frame     as_tibble        
 ##  [9] c                 coerce            contour           cut              
 ## [13] dim               dimnames          dimnames&lt;-        droplevels       
 ## [17] filter            image             initialize        is.na            
@@ -946,7 +947,7 @@ methods(class = &quot;stars&quot;)</code></pre>
 ## [41] st_crop           st_crs            st_crs&lt;-          st_dimensions    
 ## [45] st_dimensions&lt;-   st_extract        st_geometry       st_interpolate_aw
 ## [49] st_intersects     st_join           st_mosaic         st_normalize     
-## [53] st_redimension    st_sample         st_transform_proj st_transform     
+## [53] st_redimension    st_sample         st_transform      st_transform_proj
 ## [57] write_stars      
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <div class="well">
@@ -968,6 +969,8 @@ laxpol %&gt;%
       plot()</code></pre>
 </div>
 </div>
+<p>Another big field of application for <strong>stars</strong> is the analysis of multi-temporal raster stacks or data-cubes. Custom-written function can then be easily applied to entire stacks of rasters, e.g. <code>stars::st_apply()</code>. We don’t explore this as part of this tutorial, but have a look at the <strong>stars</strong> website for some example code.</p>
+<p><img src='https://raw.githubusercontent.com/r-spatial/stars/master/images/cube1.png'></img> (source: <a href="https://r-spatial.github.io/stars/" class="uri">https://r-spatial.github.io/stars/</a>)</p>
 </div>
 </div>
 

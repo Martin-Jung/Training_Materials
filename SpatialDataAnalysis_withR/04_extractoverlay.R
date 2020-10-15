@@ -1,0 +1,107 @@
+#' ---
+#' title: "Extractions and overlays"
+#' output: 
+#'   html_document: 
+#'     theme: yeti
+#' ---
+#' 
+
+#' 
+#' [<i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here](`r output`).  Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.  
+#' 
+#' # Raster extractions
+#' 
+#' Data extractions are quite common GIS tasks both for vector and raster data. Here the raster package support a number of functions to extract values from another or different data sources (vector files).
+#' 
+#' It is possible to extract data directly from a raster file
+## ---- eval =FALSE-------------------------------------------------------------
+## library(raster)
+## 
+## # Get the forest cover
+## ras <- raster('ht_004_clipped.tif', 1)
+## ras <- setMinMax(ras)
+## 
+## # The value in the upper left corner
+## ras[1,1]
+## 
+## # Take 10 point values at random
+## sampleRandom(ras, 10)
+## 
+## # Or regularly spaced
+## sampleRegular(ras, 10 )
+## 
+## # or stratefied in case you have zones
+## # sampleStratified()
+## 
+
+#' 
+#' Note that the **sf** package has similar methods, see `st_sample()`
+#' 
+#' Another common application are 'zonal' statistics, so where one raster layer provides the target estimates to be extracted and another specific zones for which the values are requested.
+#' 
+## -----------------------------------------------------------------------------
+# Load both forest and artifical land cover data
+forest <- raster('ht_004_clipped.tif',1)
+artif <- raster('ht_004_clipped.tif',2)
+
+# Create a zone based on artifical coverage
+# E.g. values below 50% get 1 and above get 2
+artif <- reclassify(artif, c(0,500,1,
+                             500,1000,2)
+                    )
+# Check that both have the same extent and resolution, otherwise need to rescale
+compareRaster(forest,artif)
+
+# Now calculate for both zones the mean fraction of forest within them 
+zonal(forest, artif, fun = 'mean')
+
+
+#' 
+#' Considerable more common however is the extraction of rasterdata within a given polygon or point
+#' 
+## -----------------------------------------------------------------------------
+# Artifical
+ras <- raster('ht_004_clipped.tif',2)
+# Load Laxenburg shape
+laxpol <- st_read('Laxenburg.gpkg')
+
+ex <- extract(ras, laxpol, fun = mean)
+ex
+
+# Another useful way for extracting values is to first clip and mask the input raster
+# Often this can be considerably faster speedwise
+# First crop
+ras <- crop(ras, laxpol)
+# Then mask
+ras <- mask(ras, laxpol)
+# Note the options for masking though (?mask)
+
+# Now we simply get all values and calculate the mean directly
+mean( values(ras) , na.rm = T)
+
+
+#' 
+#' 
+#' ## Even faster extractions
+#' 
+#' There are other packages such as ´velox´ or ´exactextractr´ that support even faster extraction of raster data.
+#' Here we extract the coverage fraction of each
+#' 
+## -----------------------------------------------------------------------------
+library(sf)
+library(raster)
+library(exactextractr)
+# Load Forest
+ras <- raster('ht_004_clipped.tif', 1)
+
+# Load Laxenburg polygon
+laxpol <- st_read('Laxenburg.gpkg')
+
+# The coverage fraction of each value
+frac  <- exact_extract(ras, laxpol)[[1]]
+frac
+
+# Or alternatively summarize a mean
+exact_extract(ras, laxpol, fun = 'mean')
+
+#' 
