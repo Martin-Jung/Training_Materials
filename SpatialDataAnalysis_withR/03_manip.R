@@ -71,6 +71,23 @@ plot(x2,add=TRUE)
 #' </div>
 #' </div>
 #' 
+#' Here we use mainly the ´sf´ package and its functionalities for manipulating vector data geometries. More and other tools are available in the ´rgeos´ package, which however only works with ´sp´ objects and can be quite tedious.
+#' 
+## -----------------------------------------------------------------------------
+library(rgeos)
+library(sp)
+# Load the Meuse river data points
+data(meuse)
+coordinates(meuse) <- c("x", "y")
+
+# Create a delaunay triangulation between all points
+plot(gDelaunayTriangulation(meuse))
+points(meuse)
+
+#' 
+#' For a list of functions provided by the geos library, call `lsf.str("package:rgeos",pattern = 'g')` and pay attention to functions starting with 'g*'.
+#' 
+#' 
 #' # Raster manipulations
 #' 
 #' Raster data can manipulated in a number of ways, which is often necessary for subsequent analyses. For instance when several input layers differ in spatial extent, resolution or projection from another.
@@ -107,4 +124,28 @@ plot(forest)
 #' 
 #' </div>
 #' </div>
+#' 
+#' ## Applying functions to raster stacks
+#' 
+#' One functionality that is commonly needed is to apply arithmetric calculations or custom functions to stacks of raster images.
+#' 
+## -----------------------------------------------------------------------------
+library(raster)
+
+# Lets load the raster stack
+ras <- stack('ht_004_clipped.tif')
+
+# Assume we want to log10 transform all layers
+ras <- calc(ras, fun = log10)
+
+# Instead of a base R function, it is also possible to supply a custom R function.
+myfunc <- function(x){ abs( x[2] - x[1] ) } # Calculate the absolute difference of the layers 2 and 1
+ras <- calc(ras, fun = myfunc)
+
+# Note that the result is not a rasterStack object anymore, but instead a single rasterLayer
+plot(ras, col = rainbow(10))
+
+
+#' 
+#' Note that this is run on a single core. To run this code in parallel, have a look at the `mclapply` function from the `parallel` package.
 #' 

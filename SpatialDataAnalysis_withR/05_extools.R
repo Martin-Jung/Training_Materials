@@ -1,0 +1,120 @@
+#' ---
+#' title: "External tools"
+#' output: 
+#'   html_document: 
+#'     theme: yeti
+#' ---
+#' 
+
+#' 
+#' [<i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here](`r output`).  Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.  
+#' 
+#' # Wrappers and external tools
+#' 
+#' Wrappers are packages that combine the computational efficiency of external tools with the convenience of R-scripts. So rather than executing for a combination of bash/console commands and tools from Graphical Interfaces, simply call the tools directly in subprocesses within R.
+#' 
+#' Here we cover a few, but there obviously many other wrappers for open source GIS tools that one can incorporate into their analyses. This is by the way very similar to developing python code for ArcPy. For instance there is `RSAGA` if you want to load the tools available through SAGA or `rgrass7` for GRASS-based tools. Please explore the library functions on your own.
+#' 
+#' ## GdalTools
+#' 
+#' The GDAL library forms the backbone of many open-source software solutions and also provides a number of tools, which are - due to their fast C implementation - often the best solution for processing large datasets or memory intensive tasks.
+#' In R the package `gdalUtils` provides one way of accessing the tools from GDAL.
+#' 
+## -----------------------------------------------------------------------------
+library(gdalUtils)
+
+# Convert one dataset to another format
+gdal_translate(src_dataset = 'ht_004_clipped.tif',
+               dst_dataset = 'ht_004_clipped.asc',
+               b = 2 # Only band 2
+                )
+file.remove('ht_004_clipped.asc') # Remove the file again
+
+# Query file info using the gdalinfo
+gdalinfo('ht_004_clipped.tif')
+
+
+#' 
+#' Another very common task is to combine two rasters (overlapping or not) to a new single raster file. This can be done using a VRT file. The code and data below is from the help file, so have a look.
+#' 
+## -----------------------------------------------------------------------------
+# Load these files provided by the gdalUtils package
+layer1 <- system.file("external/tahoe_lidar_bareearth.tif", package="gdalUtils")
+layer2 <- system.file("external/tahoe_lidar_highesthit.tif", package="gdalUtils")
+
+# The ouput vrt file
+output.vrt <- paste(tempfile(),".vrt",sep="")
+
+# Now build the vrt. Notice that here we specfiy that each input raster
+# Here we provide a vector of two files. Note that you can do this for many more
+gdalbuildvrt(gdalfile = c(layer1,layer2), 
+             output.vrt = output.vrt,
+             separate = TRUE, # Save in separate bands. If this set to FALSE both layers will be mosaiced
+             verbose = TRUE
+             )
+
+
+#' 
+#' <div class="well">
+#' Save the vrt from above in netCDF file format.
+#' 
+#' <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">Show Solution</button>
+#' <div id="demo1" class="collapse">
+
+#' 
+#' </div>
+#' </div>
+#' 
+#' ## QGIS process
+#' 
+#' The [QGIS](https://qgis.org/en/site/) suite is the most popular and comprehensive open source GIS suite. Its visual and analytical capacities - in my opinion - are already superior than that of many propertiary GIS software (ArcGIS, ENVI,...).
+#' 
+#' QGIS has also many useful functions for vector and raster processing. Through a new experimental wrapping package these functions have now become available.
+#' 
+## -----------------------------------------------------------------------------
+library(qgisprocess)
+
+# NOTE: You need the latest QGIS version (3.14) for this to work!
+# First set the path to the QGIS installation
+qgis_configure()
+# This command should print a sucess at the end. 
+
+# This now supports a whooping 977 algorithms (possibly even more on your system)
+# qgis_algorithms()
+
+
+#' 
+#' Lets load the Laxenburg park shapefile and buffer it using `qgisprocess` as example.
+#' 
+## -----------------------------------------------------------------------------
+suppressPackageStartupMessages(library(sf))
+laxpol <- st_read('Laxenburg.gpkg')
+
+# Run 
+result <- qgis_run_algorithm(
+  "native:buffer",
+  INPUT = laxpol,
+  DISTANCE = 0.001, # In degrees since we did not transform the layer
+  DISSOLVE = TRUE,
+  .quiet = TRUE
+)
+
+# This has created a new QGIS results file
+# Now load it into R
+output_sf <- sf::read_sf(qgis_output(result, "OUTPUT"))
+plot(output_sf)
+
+#' 
+#' 
+#' Make sure that both QGIS and the qgisprocess package are installed on your system. Note that the R-package is still in development and some things might not work as expected.
+#' 
+## -----------------------------------------------------------------------------
+# The help for any algorithm can be found in QGIS or by looking it up directly
+
+# Get data.frame with all algorithms
+la <- qgis_algorithms()
+
+qgis_show_help("native:dissolve")
+
+#' 
+#' Best explore the package functions yourself if you are looking for a function not yet available in standard R packages. Often the python code implemented in QGIS can also be considerably faster.

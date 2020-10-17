@@ -27,6 +27,7 @@ remotes::install_github("paleolimbot/qgisprocess") # A wrapper for accessing qgi
 
 install.packages('mapview') # For intactive spatial visualizations
 install.packages('tmap') # For thematic map visualizations
+install.packages('cartography') # For thematic map visualizations
 ```
 
 If one or two of the package installations fail, then copy the error description and search for it using your search engine of choice.

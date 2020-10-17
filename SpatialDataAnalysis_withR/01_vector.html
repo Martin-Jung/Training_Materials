@@ -458,6 +458,7 @@ coordinates(dat) &lt;- ~ Longitude + Latitude
 # By default this object won&#39;t have any projection assigned
 # Since we know that the tabular data is in WGS-84 projection (Longitude-Latitude), we can set it
 proj4string(dat) &lt;- &#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;</code></pre>
+<p>In case you are not aware of the projections string in proj4 format, go to this <a href="https://spatialreference.org/">site</a> to find a comprehensive list.</p>
 <div class="well">
 <p>Do you think you can visualize this new object and check that it is indeed spatial?</p>
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">

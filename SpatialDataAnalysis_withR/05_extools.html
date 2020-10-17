@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>External tools</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="yeti_bootswatch.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Spatial data and analysis in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Starting page</a>
+</li>
+<li>
+  <a href="lecture.html">Lecture</a>
+</li>
+<li>
+  <a href="packages.html">Installing packages</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Contents
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Loading spatial data</li>
+    <li>
+      <a href="01_vector.html">1 - Vector data</a>
+    </li>
+    <li>
+      <a href="02_raster.html">2 - Raster data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Analysing spatial data</li>
+    <li>
+      <a href="03_manip.html">3 - Spatial manipulations</a>
+    </li>
+    <li>
+      <a href="04_extractoverlay.html">4 - Overlays and extractions</a>
+    </li>
+    <li>
+      <a href="05_extools.html">5 - External tools</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Spatial visualization</li>
+    <li>
+      <a href="06_tmap.html">6 - Thematic and interactive maps</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://iiasa.ac.at">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">External tools</h1>
+
+</div>
+
+
+<p><a href="05_extools.R"><i class="fa fa-file-code-o fa-3x" aria-hidden="true"></i> The R Script associated with this page is available here</a>. Download this file and open it (or copy-paste into a new script) with RStudio if you want to follow along.</p>
+<div id="wrappers-and-external-tools" class="section level1">
+<h1><span class="header-section-number">1</span> Wrappers and external tools</h1>
+<p>Wrappers are packages that combine the computational efficiency of external tools with the convenience of R-scripts. So rather than executing for a combination of bash/console commands and tools from Graphical Interfaces, simply call the tools directly in subprocesses within R.</p>
+<p>Here we cover a few, but there obviously many other wrappers for open source GIS tools that one can incorporate into their analyses. This is by the way very similar to developing python code for ArcPy. For instance there is <code>RSAGA</code> if you want to load the tools available through SAGA or <code>rgrass7</code> for GRASS-based tools. Please explore the library functions on your own.</p>
+<div id="gdaltools" class="section level2">
+<h2><span class="header-section-number">1.1</span> GdalTools</h2>
+<p>The GDAL library forms the backbone of many open-source software solutions and also provides a number of tools, which are - due to their fast C implementation - often the best solution for processing large datasets or memory intensive tasks. In R the package <code>gdalUtils</code> provides one way of accessing the tools from GDAL.</p>
+<pre class="r"><code>library(gdalUtils)
+
+# Convert one dataset to another format
+gdal_translate(src_dataset = &#39;ht_004_clipped.tif&#39;,
+               dst_dataset = &#39;ht_004_clipped.asc&#39;,
+               b = 2 # Only band 2
+                )</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>file.remove(&#39;ht_004_clipped.asc&#39;) # Remove the file again</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># Query file info using the gdalinfo
+gdalinfo(&#39;ht_004_clipped.tif&#39;)</code></pre>
+<pre><code>##  [1] &quot;Driver: GTiff/GeoTIFF&quot;                                                    
+##  [2] &quot;Files: ht_004_clipped.tif&quot;                                                
+##  [3] &quot;Size is 937, 557&quot;                                                         
+##  [4] &quot;Coordinate System is:&quot;                                                    
+##  [5] &quot;GEOGCRS[\&quot;WGS 84\&quot;,&quot;                                                      
+##  [6] &quot;    DATUM[\&quot;World Geodetic System 1984\&quot;,&quot;                                
+##  [7] &quot;        ELLIPSOID[\&quot;WGS 84\&quot;,6378137,298.257223563,&quot;                      
+##  [8] &quot;            LENGTHUNIT[\&quot;metre\&quot;,1]]],&quot;                                   
+##  [9] &quot;    PRIMEM[\&quot;Greenwich\&quot;,0,&quot;                                              
+## [10] &quot;        ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433]],&quot;                       
+## [11] &quot;    CS[ellipsoidal,2],&quot;                                                   
+## [12] &quot;        AXIS[\&quot;geodetic latitude (Lat)\&quot;,north,&quot;                          
+## [13] &quot;            ORDER[1],&quot;                                                    
+## [14] &quot;            ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433]],&quot;                   
+## [15] &quot;        AXIS[\&quot;geodetic longitude (Lon)\&quot;,east,&quot;                          
+## [16] &quot;            ORDER[2],&quot;                                                    
+## [17] &quot;            ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433]],&quot;                   
+## [18] &quot;    ID[\&quot;EPSG\&quot;,4326]]&quot;                                                   
+## [19] &quot;Data axis to CRS axis mapping: 2,1&quot;                                       
+## [20] &quot;Origin = (7.377105383000000,48.967647157000002)&quot;                          
+## [21] &quot;Pixel Size = (0.009919088191035,-0.009910704242370)&quot;                      
+## [22] &quot;Metadata:&quot;                                                                
+## [23] &quot;  AREA_OR_POINT=Area&quot;                                                     
+## [24] &quot;Image Structure Metadata:&quot;                                                
+## [25] &quot;  COMPRESSION=DEFLATE&quot;                                                    
+## [26] &quot;  INTERLEAVE=PIXEL&quot;                                                       
+## [27] &quot;Corner Coordinates:&quot;                                                      
+## [28] &quot;Upper Left  (   7.3771054,  48.9676472) (  7d22&#39;37.58\&quot;E, 48d58&#39; 3.53\&quot;N)&quot;
+## [29] &quot;Lower Left  (   7.3771054,  43.4473849) (  7d22&#39;37.58\&quot;E, 43d26&#39;50.59\&quot;N)&quot;
+## [30] &quot;Upper Right (  16.6712910,  48.9676472) ( 16d40&#39;16.65\&quot;E, 48d58&#39; 3.53\&quot;N)&quot;
+## [31] &quot;Lower Right (  16.6712910,  43.4473849) ( 16d40&#39;16.65\&quot;E, 43d26&#39;50.59\&quot;N)&quot;
+## [32] &quot;Center      (  12.0241982,  46.2075160) ( 12d 1&#39;27.11\&quot;E, 46d12&#39;27.06\&quot;N)&quot;
+## [33] &quot;Band 1 Block=937x2 Type=UInt16, ColorInterp=Gray&quot;                         
+## [34] &quot;  NoData Value=0&quot;                                                         
+## [35] &quot;Band 2 Block=937x2 Type=UInt16, ColorInterp=Undefined&quot;                    
+## [36] &quot;  NoData Value=0&quot;</code></pre>
+<p>Another very common task is to combine two rasters (overlapping or not) to a new single raster file. This can be done using a VRT file. The code and data below is from the help file, so have a look.</p>
+<pre class="r"><code># Load these files provided by the gdalUtils package
+layer1 &lt;- system.file(&quot;external/tahoe_lidar_bareearth.tif&quot;, package=&quot;gdalUtils&quot;)
+layer2 &lt;- system.file(&quot;external/tahoe_lidar_highesthit.tif&quot;, package=&quot;gdalUtils&quot;)
+
+# The ouput vrt file
+output.vrt &lt;- paste(tempfile(),&quot;.vrt&quot;,sep=&quot;&quot;)
+
+# Now build the vrt. Notice that here we specfiy that each input raster
+# Here we provide a vector of two files. Note that you can do this for many more
+gdalbuildvrt(gdalfile = c(layer1,layer2), 
+             output.vrt = output.vrt,
+             separate = TRUE, # Save in separate bands. If this set to FALSE both layers will be mosaiced
+             verbose = TRUE
+             )</code></pre>
+<pre><code>## Checking gdal_installation...</code></pre>
+<pre><code>## GDAL version 3.0.4</code></pre>
+<pre><code>## GDAL command being used: &quot;C:\OSGeo4W64\bin\gdalbuildvrt.exe&quot; -separate  &quot;C:\Users\Martin\AppData\Local\Temp\RtmpqIhFO4\file27f06eba3967.vrt&quot; &quot;C:/Users/Martin/Documents/R/win-library/4.0/gdalUtils/external/tahoe_lidar_bareearth.tif&quot; &quot;C:/Users/Martin/Documents/R/win-library/4.0/gdalUtils/external/tahoe_lidar_highesthit.tif&quot;</code></pre>
+<pre><code>## NULL</code></pre>
+<div class="well">
+<p>Save the vrt from above in netCDF file format.</p>
+<button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo1">
+Show Solution
+</button>
+<div id="demo1" class="collapse">
+<pre class="r"><code># Done here using gdal_translate. Any other tool works as well
+gdal_translate(src_dataset = output.vrt,
+               dst_dataset = &#39;newLidar.nc&#39;)</code></pre>
+</div>
+</div>
+</div>
+<div id="qgis-process" class="section level2">
+<h2><span class="header-section-number">1.2</span> QGIS process</h2>
+<p>The <a href="https://qgis.org/en/site/">QGIS</a> suite is the most popular and comprehensive open source GIS suite. Its visual and analytical capacities - in my opinion - are already superior than that of many propertiary GIS software (ArcGIS, ENVI,…).</p>
+<p>QGIS has also many useful functions for vector and raster processing. Through a new experimental wrapping package these functions have now become available.</p>
+<pre class="r"><code>library(qgisprocess)</code></pre>
+<pre><code>## Using &#39;qgis_process&#39; at &#39;C://OSGeo4W64/bin/qgis_process-qgis.bat&#39;.
+## Run `qgis_configure()` for details.</code></pre>
+<pre class="r"><code># NOTE: You need the latest QGIS version (3.14) for this to work!
+# First set the path to the QGIS installation
+qgis_configure()</code></pre>
+<pre><code>## getOption(&#39;qgisprocess.path&#39;) was not found.</code></pre>
+<pre><code>## Sys.getenv(&#39;R_QGISPROCESS_PATH&#39;) was not found.</code></pre>
+<pre><code>## Trying &#39;qgis_process&#39; on PATH</code></pre>
+<pre><code>## Error in rethrow_call(c_processx_exec, command, c(command, args), stdin, : Command &#39;qgis_process&#39; not found @win/processx.c:994 (processx_exec)</code></pre>
+<pre><code>## Found 1 QGIS installation containing &#39;qgis_process&#39;:
+##  C://OSGeo4W64/bin/qgis_process-qgis.bat</code></pre>
+<pre><code>## Trying command &#39;C://OSGeo4W64/bin/qgis_process-qgis.bat&#39;</code></pre>
+<pre><code>## Success!</code></pre>
+<pre class="r"><code># This command should print a sucess at the end. 
+
+# This now supports a whooping 977 algorithms (possibly even more on your system)
+# qgis_algorithms()</code></pre>
+<p>Lets load the Laxenburg park shapefile and buffer it using <code>qgisprocess</code> as example.</p>
+<pre class="r"><code>suppressPackageStartupMessages(library(sf))</code></pre>
+<pre><code>## Warning: replacing previous import &#39;vctrs::data_frame&#39; by &#39;tibble::data_frame&#39;
+## when loading &#39;dplyr&#39;</code></pre>
+<pre class="r"><code>laxpol &lt;- st_read(&#39;Laxenburg.gpkg&#39;)</code></pre>
+<pre><code>## Reading layer `Laxenburg&#39; from data source `C:\Users\Martin\IIASA\Talks\20201022_ESMtraining\CDAT_Materials\SpatialDataAnalysis_withR\Laxenburg.gpkg&#39; using driver `GPKG&#39;
+## Simple feature collection with 1 feature and 2 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 16.35322 ymin: 48.05182 xmax: 16.38144 ymax: 48.07108
+## geographic CRS: WGS 84</code></pre>
+<pre class="r"><code># Run 
+result &lt;- qgis_run_algorithm(
+  &quot;native:buffer&quot;,
+  INPUT = laxpol,
+  DISTANCE = 0.001, # In degrees since we did not transform the layer
+  DISSOLVE = TRUE,
+  .quiet = TRUE
+)</code></pre>
+<pre><code>## Argument `SEGMENTS` is unspecified (using QGIS default value).</code></pre>
+<pre><code>## Using `END_CAP_STYLE = &quot;Round&quot;`</code></pre>
+<pre><code>## Using `JOIN_STYLE = &quot;Round&quot;`</code></pre>
+<pre><code>## Argument `MITER_LIMIT` is unspecified (using QGIS default value).</code></pre>
+<pre><code>## Using `OUTPUT = qgis_tmp_vector()`</code></pre>
+<pre class="r"><code># This has created a new QGIS results file
+# Now load it into R
+output_sf &lt;- sf::read_sf(qgis_output(result, &quot;OUTPUT&quot;))
+plot(output_sf)</code></pre>
+<p><img src="05_extools_files/figure-html/unnamed-chunk-6-1.png" /><!-- --></p>
+<p>Make sure that both QGIS and the qgisprocess package are installed on your system. Note that the R-package is still in development and some things might not work as expected.</p>
+<pre class="r"><code># The help for any algorithm can be found in QGIS or by looking it up directly
+
+# Get data.frame with all algorithms
+la &lt;- qgis_algorithms()
+
+qgis_show_help(&quot;native:dissolve&quot;)</code></pre>
+<pre><code>## Dissolve (native:dissolve)
+## 
+## ----------------
+## Description
+## ----------------
+## This algorithm takes a vector layer and combines their features into new features. One or more attributes can be specified to dissolve features belonging to the same class (having the same value for the specified attributes), alternatively all features can be dissolved in a single one.
+## 
+## All output geometries will be converted to multi geometries. In case the input is a polygon layer, common boundaries of adjacent polygons being dissolved will get erased.
+## 
+## ----------------
+## Arguments
+## ----------------
+## 
+## INPUT: Input layer
+##  Argument type:  source
+##  Acceptable values:
+##      - Path to a vector layer
+## FIELD: Dissolve field(s)
+##  Argument type:  field
+##  Acceptable values:
+##      - The name of an existing field
+##      - ; delimited list of existing field names
+## OUTPUT: Dissolved
+##  Argument type:  sink
+##  Acceptable values:
+##      - Path for new vector layer
+## 
+## ----------------
+## Outputs
+## ----------------
+## 
+## OUTPUT: &lt;outputVector&gt;
+##  Dissolved</code></pre>
+<p>Best explore the package functions yourself if you are looking for a function not yet available in standard R packages. Often the python code implemented in QGIS can also be considerably faster.</p>
+</div>
+</div>
+
+
+<!-- give the footer some space -->
+<br/>
+<br/>
+
+<footer id="site-footer">
+  <div id="footer1">
+  </div>
+  <div id="footer2">
+  <a rel="license" property="http://creativecommons.org/ns#license"
+  href="http://creativecommons.org/licenses/by/4.0/" ><img src="img/cc-by.svg" alt="cc-by"/></a> 
+  <a href = 'https://iiasa.ac.at/'> <img src='img/IIASA_PNG%20logo-short_blue.png' alt = 'IIASA' width = 30px height = 40px> </a>
+  </div>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

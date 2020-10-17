@@ -506,19 +506,30 @@ laxpol &lt;- st_read(&#39;Laxenburg.gpkg&#39;) %&gt;%
 plot(laxpol)</code></pre>
 </div>
 </div>
+<p>Here we use mainly the ´sf´ package and its functionalities for manipulating vector data geometries. More and other tools are available in the ´rgeos´ package, which however only works with ´sp´ objects and can be quite tedious.</p>
+<pre class="r"><code>library(rgeos)</code></pre>
+<pre><code>## rgeos version: 0.5-3, (SVN revision 634)
+##  GEOS runtime version: 3.8.0-CAPI-1.13.1 
+##  Linking to sp version: 1.4-2 
+##  Polygon checking: TRUE</code></pre>
+<pre class="r"><code>library(sp)
+# Load the Meuse river data points
+data(meuse)
+coordinates(meuse) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+
+# Create a delaunay triangulation between all points
+plot(gDelaunayTriangulation(meuse))
+points(meuse)</code></pre>
+<p><img src="03_manip_files/figure-html/unnamed-chunk-5-1.png" /><!-- --></p>
+<p>For a list of functions provided by the geos library, call <code>lsf.str("package:rgeos",pattern = 'g')</code> and pay attention to functions starting with ’g*’.</p>
 </div>
 <div id="raster-manipulations" class="section level1">
 <h1><span class="header-section-number">2</span> Raster manipulations</h1>
 <p>Raster data can manipulated in a number of ways, which is often necessary for subsequent analyses. For instance when several input layers differ in spatial extent, resolution or projection from another.</p>
 <p>Here are some examples how to manipulate raster data directly.</p>
-<pre class="r"><code>library(raster)</code></pre>
-<pre><code>## Loading required package: sp</code></pre>
-<pre><code>## 
-## Attaching package: &#39;raster&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre class="r"><code>ras &lt;- raster(&#39;ht_004_clipped.tif&#39;,band = 1)
+<pre class="r"><code>library(raster)
+
+ras &lt;- raster(&#39;ht_004_clipped.tif&#39;,band = 1)
 ras &lt;- setMinMax(ras)
 
 # Aggregate the raster by a factor of 5 (too 5000m resolution)
@@ -533,7 +544,7 @@ forest[forest &gt;= 950] &lt;- 1
 forest &lt;- boundaries(forest,type = &#39;outer&#39;)
 
 plot(forest)</code></pre>
-<p><img src="03_manip_files/figure-html/unnamed-chunk-5-1.png" /><!-- --></p>
+<p><img src="03_manip_files/figure-html/unnamed-chunk-6-1.png" /><!-- --></p>
 <div class="well">
 <p>Can you calculate the area in km² of grid cells with more than 95% forest area?</p>
 <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">
@@ -554,6 +565,26 @@ ar &lt;- ras * ar
 # The area in km2
 cellStats(ar,&#39;sum&#39;)</code></pre>
 </div>
+</div>
+<div id="applying-functions-to-raster-stacks" class="section level2">
+<h2><span class="header-section-number">2.1</span> Applying functions to raster stacks</h2>
+<p>One functionality that is commonly needed is to apply arithmetric calculations or custom functions to stacks of raster images.</p>
+<pre class="r"><code>library(raster)
+
+# Lets load the raster stack
+ras &lt;- stack(&#39;ht_004_clipped.tif&#39;)
+
+# Assume we want to log10 transform all layers
+ras &lt;- calc(ras, fun = log10)
+
+# Instead of a base R function, it is also possible to supply a custom R function.
+myfunc &lt;- function(x){ abs( x[2] - x[1] ) } # Calculate the absolute difference of the layers 2 and 1
+ras &lt;- calc(ras, fun = myfunc)
+
+# Note that the result is not a rasterStack object anymore, but instead a single rasterLayer
+plot(ras, col = rainbow(10))</code></pre>
+<p><img src="03_manip_files/figure-html/unnamed-chunk-8-1.png" /><!-- --></p>
+<p>Note that this is run on a single core. To run this code in parallel, have a look at the <code>mclapply</code> function from the <code>parallel</code> package.</p>
 </div>
 </div>
 

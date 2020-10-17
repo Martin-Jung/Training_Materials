@@ -145,6 +145,36 @@ plot(laxpol)
 </div>
 </div>
 
+Here we use mainly the ´sf´ package and its functionalities for manipulating vector data geometries. More and other tools are available in the ´rgeos´ package, which however only works with ´sp´ objects and can be quite tedious.
+
+
+```r
+library(rgeos)
+```
+
+```
+## rgeos version: 0.5-3, (SVN revision 634)
+##  GEOS runtime version: 3.8.0-CAPI-1.13.1 
+##  Linking to sp version: 1.4-2 
+##  Polygon checking: TRUE
+```
+
+```r
+library(sp)
+# Load the Meuse river data points
+data(meuse)
+coordinates(meuse) <- c("x", "y")
+
+# Create a delaunay triangulation between all points
+plot(gDelaunayTriangulation(meuse))
+points(meuse)
+```
+
+![](03_manip_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+For a list of functions provided by the geos library, call `lsf.str("package:rgeos",pattern = 'g')` and pay attention to functions starting with 'g*'.
+
+
 # Raster manipulations
 
 Raster data can manipulated in a number of ways, which is often necessary for subsequent analyses. For instance when several input layers differ in spatial extent, resolution or projection from another.
@@ -154,24 +184,7 @@ Here are some examples how to manipulate raster data directly.
 
 ```r
 library(raster)
-```
 
-```
-## Loading required package: sp
-```
-
-```
-## 
-## Attaching package: 'raster'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 ras <- raster('ht_004_clipped.tif',band = 1)
 ras <- setMinMax(ras)
 
@@ -189,7 +202,7 @@ forest <- boundaries(forest,type = 'outer')
 plot(forest)
 ```
 
-![](03_manip_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](03_manip_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 <div class="well">
 Can you calculate the area in km² of grid cells with more than 95% forest area?
@@ -215,4 +228,30 @@ cellStats(ar,'sum')
 
 </div>
 </div>
+
+## Applying functions to raster stacks
+
+One functionality that is commonly needed is to apply arithmetric calculations or custom functions to stacks of raster images.
+
+
+```r
+library(raster)
+
+# Lets load the raster stack
+ras <- stack('ht_004_clipped.tif')
+
+# Assume we want to log10 transform all layers
+ras <- calc(ras, fun = log10)
+
+# Instead of a base R function, it is also possible to supply a custom R function.
+myfunc <- function(x){ abs( x[2] - x[1] ) } # Calculate the absolute difference of the layers 2 and 1
+ras <- calc(ras, fun = myfunc)
+
+# Note that the result is not a rasterStack object anymore, but instead a single rasterLayer
+plot(ras, col = rainbow(10))
+```
+
+![](03_manip_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+Note that this is run on a single core. To run this code in parallel, have a look at the `mclapply` function from the `parallel` package.
 

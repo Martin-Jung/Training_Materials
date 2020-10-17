@@ -1,5 +1,5 @@
 #' ---
-#' title: " Raster data"
+#' title: "Raster data"
 #' output: 
 #'   html_document: 
 #'     theme: yeti
@@ -284,4 +284,4 @@ methods(class = "stars")
 #' 
 #' 
 #' <img src='https://raw.githubusercontent.com/r-spatial/stars/master/images/cube1.png'></img>
-#' (source: https://r-spatial.github.io/stars/)
+#' (source: https://r-spatial.github.io/stars/ )

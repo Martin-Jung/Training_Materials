@@ -56,6 +56,7 @@ proj4string(dat) <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
 
 ```
 
+In case you are not aware of the projections string in proj4 format, go to this [site](https://spatialreference.org/) to find a comprehensive list.
 
 <div class="well">
 Do you think you can visualize this new object and check that it is indeed spatial?

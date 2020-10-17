@@ -1,5 +1,5 @@
 ---
-title: " Raster data"
+title: "Raster data"
 output: 
   html_document: 
     theme: yeti
@@ -579,4 +579,4 @@ Another big field of application for **stars** is the analysis of multi-temporal
 
 
 <img src='https://raw.githubusercontent.com/r-spatial/stars/master/images/cube1.png'></img>
-(source: https://r-spatial.github.io/stars/)
+(source: https://r-spatial.github.io/stars/ )
