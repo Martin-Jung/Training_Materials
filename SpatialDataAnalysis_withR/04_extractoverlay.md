@@ -16,6 +16,14 @@ Data extractions are quite common GIS tasks both for vector and raster data. Her
 It is possible to extract data directly from a raster file
 
 ```r
+library(sf)
+```
+
+```
+## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+```
+
+```r
 library(raster)
 
 # Get the forest cover
@@ -24,13 +32,40 @@ ras <- setMinMax(ras)
 
 # The value in the upper left corner
 ras[1,1]
+```
 
+```
+##     
+## 226
+```
+
+```r
 # Take 10 point values at random
 sampleRandom(ras, 10)
+```
 
+```
+##  [1]  46 950 122 326 406  16 663 472 315 621
+```
+
+```r
 # Or regularly spaced
 sampleRegular(ras, 10 )
+```
 
+```
+##      ht_004_clipped
+## [1,]             NA
+## [2,]            934
+## [3,]            563
+## [4,]            123
+## [5,]             NA
+## [6,]             NA
+## [7,]             NA
+## [8,]            125
+```
+
+```r
 # or stratefied in case you have zones 
 # sampleStratified()
 ```
@@ -80,7 +115,7 @@ laxpol <- st_read('Laxenburg.gpkg')
 ```
 
 ```
-## Reading layer `Laxenburg' from data source `C:\Users\Martin\IIASA\Talks\20201022_ESMtraining\CDAT_Materials\SpatialDataAnalysis_withR\Laxenburg.gpkg' using driver `GPKG'
+## Reading layer `Laxenburg' from data source `/mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/Laxenburg.gpkg' using driver `GPKG'
 ## Simple feature collection with 1 feature and 2 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
@@ -134,7 +169,7 @@ laxpol <- st_read('Laxenburg.gpkg')
 ```
 
 ```
-## Reading layer `Laxenburg' from data source `C:\Users\Martin\IIASA\Talks\20201022_ESMtraining\CDAT_Materials\SpatialDataAnalysis_withR\Laxenburg.gpkg' using driver `GPKG'
+## Reading layer `Laxenburg' from data source `/mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/Laxenburg.gpkg' using driver `GPKG'
 ## Simple feature collection with 1 feature and 2 fields
 ## geometry type:  POLYGON
 ## dimension:      XY

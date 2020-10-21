@@ -29,5 +29,5 @@ left:
   - text: "Resources"
     href: resources.html
 right:
-  - icon: fa-github fa-lg
+  - icon: fa-university
     href: https://iiasa.ac.at

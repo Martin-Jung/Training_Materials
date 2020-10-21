@@ -404,7 +404,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://iiasa.ac.at">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fa fa-university"></span>
      
   </a>
 </li>
@@ -435,6 +435,8 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Raster extractions</h1>
 <p>Data extractions are quite common GIS tasks both for vector and raster data. Here the raster package support a number of functions to extract values from another or different data sources (vector files).</p>
 <p>It is possible to extract data directly from a raster file</p>
+<pre class="r"><code>library(sf)</code></pre>
+<pre><code>## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</code></pre>
 <pre class="r"><code>library(raster)
 
 # Get the forest cover
@@ -442,15 +444,24 @@ ras &lt;- raster(&#39;ht_004_clipped.tif&#39;, 1)
 ras &lt;- setMinMax(ras)
 
 # The value in the upper left corner
-ras[1,1]
-
-# Take 10 point values at random
-sampleRandom(ras, 10)
-
-# Or regularly spaced
-sampleRegular(ras, 10 )
-
-# or stratefied in case you have zones 
+ras[1,1]</code></pre>
+<pre><code>##     
+## 226</code></pre>
+<pre class="r"><code># Take 10 point values at random
+sampleRandom(ras, 10)</code></pre>
+<pre><code>##  [1]  46 950 122 326 406  16 663 472 315 621</code></pre>
+<pre class="r"><code># Or regularly spaced
+sampleRegular(ras, 10 )</code></pre>
+<pre><code>##      ht_004_clipped
+## [1,]             NA
+## [2,]            934
+## [3,]            563
+## [4,]            123
+## [5,]             NA
+## [6,]             NA
+## [7,]             NA
+## [8,]            125</code></pre>
+<pre class="r"><code># or stratefied in case you have zones 
 # sampleStratified()</code></pre>
 <p>Note that the <strong>sf</strong> package has similar methods, see <code>st_sample()</code></p>
 <p>Another common application are ‘zonal’ statistics, so where one raster layer provides the target estimates to be extracted and another specific zones for which the values are requested.</p>
@@ -476,7 +487,7 @@ zonal(forest, artif, fun = &#39;mean&#39;)</code></pre>
 ras &lt;- raster(&#39;ht_004_clipped.tif&#39;,2)
 # Load Laxenburg shape
 laxpol &lt;- st_read(&#39;Laxenburg.gpkg&#39;)</code></pre>
-<pre><code>## Reading layer `Laxenburg&#39; from data source `C:\Users\Martin\IIASA\Talks\20201022_ESMtraining\CDAT_Materials\SpatialDataAnalysis_withR\Laxenburg.gpkg&#39; using driver `GPKG&#39;
+<pre><code>## Reading layer `Laxenburg&#39; from data source `/mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/Laxenburg.gpkg&#39; using driver `GPKG&#39;
 ## Simple feature collection with 1 feature and 2 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
@@ -508,7 +519,7 @@ ras &lt;- raster(&#39;ht_004_clipped.tif&#39;, 1)
 
 # Load Laxenburg polygon
 laxpol &lt;- st_read(&#39;Laxenburg.gpkg&#39;)</code></pre>
-<pre><code>## Reading layer `Laxenburg&#39; from data source `C:\Users\Martin\IIASA\Talks\20201022_ESMtraining\CDAT_Materials\SpatialDataAnalysis_withR\Laxenburg.gpkg&#39; using driver `GPKG&#39;
+<pre><code>## Reading layer `Laxenburg&#39; from data source `/mnt/hdrive/Talks/20201022_ESMTrainingSession/CDAT_Materials/SpatialDataAnalysis_withR/Laxenburg.gpkg&#39; using driver `GPKG&#39;
 ## Simple feature collection with 1 feature and 2 fields
 ## geometry type:  POLYGON
 ## dimension:      XY

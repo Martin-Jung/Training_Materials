@@ -14,25 +14,26 @@
 #' Data extractions are quite common GIS tasks both for vector and raster data. Here the raster package support a number of functions to extract values from another or different data sources (vector files).
 #' 
 #' It is possible to extract data directly from a raster file
-## ---- eval =FALSE-------------------------------------------------------------
-## library(raster)
-## 
-## # Get the forest cover
-## ras <- raster('ht_004_clipped.tif', 1)
-## ras <- setMinMax(ras)
-## 
-## # The value in the upper left corner
-## ras[1,1]
-## 
-## # Take 10 point values at random
-## sampleRandom(ras, 10)
-## 
-## # Or regularly spaced
-## sampleRegular(ras, 10 )
-## 
-## # or stratefied in case you have zones
-## # sampleStratified()
-## 
+## ---- eval =TRUE--------------------------------------------------------------
+library(sf)
+library(raster)
+
+# Get the forest cover
+ras <- raster('ht_004_clipped.tif', 1)
+ras <- setMinMax(ras)
+
+# The value in the upper left corner
+ras[1,1]
+
+# Take 10 point values at random
+sampleRandom(ras, 10)
+
+# Or regularly spaced
+sampleRegular(ras, 10 )
+
+# or stratefied in case you have zones 
+# sampleStratified()
+
 
 #' 
 #' Note that the **sf** package has similar methods, see `st_sample()`
