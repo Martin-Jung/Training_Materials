@@ -48,6 +48,8 @@ ggplot(World) +
 
 Creating good looking ggplot figures can take quite some time and constant practise is recommended.
 
+Have a look at the colorspace package for creating some good colour ramps for figures that are colorblind friendly and offer decent contrast. See `colorspace::choose_palette()` and `colorspace::hcl_palettes()`
+
 ## Thematic mapping with tmap
 
 The `tmap` package has been specifically created for creating thematic maps that are visually pleasing. In my opinion advantage of using tmap over ggplot is that styles and legends are generally easier to add to a figure, making the production workflow less of an effort.
